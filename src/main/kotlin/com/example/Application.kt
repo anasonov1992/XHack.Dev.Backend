@@ -14,7 +14,6 @@ fun main() {
 
     embeddedServer(Netty, port = System.getenv("PORT").toInt()) {
         configureRouting()
-        configureSockets()
         configureSerialization()
         configureMonitoring()
         configureSecurity()
