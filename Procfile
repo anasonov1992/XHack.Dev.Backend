@@ -1,0 +1,1 @@
+web: ./build/install/XHack.Dev.Backend/bin/XHack.Dev.Backend
