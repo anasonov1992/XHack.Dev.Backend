@@ -1,1 +1,1 @@
-web: ./build/install/XHack.Dev.Backend/bin/XHack.Dev.Backend
+web: ./build/install/com.example.xhack-backend/bin/com.example.xhack-backend
