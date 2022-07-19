@@ -8,9 +8,9 @@ import com.example.plugins.*
 import org.jetbrains.exposed.sql.Database
 
 fun main() {
-    val config = HikariConfig("hikari.properties")
-    val dataSource = HikariDataSource(config)
-    Database.connect(dataSource)
+//    val config = HikariConfig("hikari.properties")
+//    val dataSource = HikariDataSource(config)
+//    Database.connect(dataSource)
 
     embeddedServer(Netty, port = System.getenv("PORT").toInt()) {
         configureRouting()
