@@ -20,7 +20,7 @@ fun main() {
         configureRouting()
         configureSerialization()
         configureMonitoring()
-//        configureSecurity()
+        configureSecurity()
     }.start(wait = true)
 }
 
