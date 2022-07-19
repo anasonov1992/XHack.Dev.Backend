@@ -13,6 +13,12 @@ import org.jetbrains.exposed.sql.Database
 fun main() {
     val config = HikariConfig("hikari.properties")
     config.driverClassName = "org.h2.Driver"
+    config.jdbcUrl = "jdbc:h2:file:~/documents/db/h2db"
+    config.maximumPoolSize = 3
+    config.isAutoCommit = false
+    config.transactionIsolation = "TRANSACTION_REPEATABLE_READ"
+    config.validate()
+
     val dataSource = HikariDataSource(config)
     Database.connect(dataSource)
 
