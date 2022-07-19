@@ -12,6 +12,7 @@ import org.jetbrains.exposed.sql.Database
 
 fun main() {
     val config = HikariConfig("hikari.properties")
+    config.driverClassName = "org.h2.Driver"
     val dataSource = HikariDataSource(config)
     Database.connect(dataSource)
 
