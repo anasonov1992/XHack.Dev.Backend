@@ -12,8 +12,6 @@ import org.jetbrains.exposed.sql.Database
 
 fun main() {
     val config = HikariConfig("hikari.properties")
-    config.driverClassName = "org.postgresql.Driver"
-
     val dataSource = HikariDataSource(config)
     Database.connect(dataSource)
 
