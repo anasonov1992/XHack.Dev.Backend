@@ -7,6 +7,7 @@ import com.example.security.hashing.HashingService
 import com.example.security.token.TokenConfig
 import com.example.security.token.TokenService
 import io.ktor.server.application.*
+import io.ktor.server.response.*
 import io.ktor.server.routing.*
 
 fun Application.configureRouting(
@@ -16,6 +17,9 @@ fun Application.configureRouting(
     tokenConfig: TokenConfig
 ) {
     routing {
+        get("/") {
+            call.respondText("Hello, World")
+        }
         signIn(hashingService, tokenService, tokenConfig) //userDataSource,
         signUp(hashingService) //, userDataSource
     }
