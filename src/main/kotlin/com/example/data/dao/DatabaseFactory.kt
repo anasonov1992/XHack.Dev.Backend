@@ -18,7 +18,7 @@ object DatabaseFactory {
 //            user = username,
 //            password = password
 //        )
-        
+
         val config = HikariConfig("hikari.properties")
         val dataSource = HikariDataSource(config)
         Database.connect(dataSource)

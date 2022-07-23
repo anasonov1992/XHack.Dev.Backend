@@ -20,6 +20,9 @@ fun Application.configureRouting(
         get("/") {
             call.respondText("Hello, World")
         }
+        get("/test") {
+            call.respondText("Testing...")
+        }
         signIn(hashingService, tokenService, tokenConfig) //userDataSource,
         signUp(hashingService) //, userDataSource
     }
