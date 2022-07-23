@@ -1,5 +1,6 @@
 package com.example
 
+import com.example.data.dao.DatabaseFactory
 import com.example.plugins.configureMonitoring
 import com.example.plugins.configureRouting
 import com.example.plugins.configureSecurity
@@ -29,12 +30,15 @@ fun Application.module() {
 //    Database.connect(dataSource)
 
 //    val userDataSource = MongoUserDataSource(db)
+
+    DatabaseFactory.init(environment.config)
+
     val tokenService = JwtTokenService()
     val tokenConfig = TokenConfig(
         issuer = environment.config.property("jwt.issuer").getString(),
         audience = environment.config.property("jwt.audience").getString(),
         expiresIn = 365L * 1000L * 60L * 60L * 24L,
-        secret = "secret") //System.getenv("JWT_SECRET")
+        secret = environment.config.property("jwt.secret").getString()) //System.getenv("JWT_SECRET")
     val hashingService = SHA256HashingService()
 
     configureRouting(hashingService, tokenService, tokenConfig) //userDataSource,
