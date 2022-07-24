@@ -1,4 +1,7 @@
 package com.example.data.requests
 
 @kotlinx.serialization.Serializable
-data class AuthRequest(val username: String, val password: String)
+data class AuthRequest(
+    val username: String,
+    val password: String
+)

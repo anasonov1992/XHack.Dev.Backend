@@ -22,9 +22,8 @@ class AuthController(private val call: ApplicationCall) {
     private val userDataSource by inject<UserDataSource>(UserDataSource::class.java)
     private val hashingService by inject<HashingService>(HashingService::class.java)
     private val tokenService by inject<TokenService>(TokenService::class.java)
-    private val tokenConfig by inject<TokenConfig>(TokenConfig::class.java)
 
-    suspend fun login() {
+    suspend fun login(tokenConfig: TokenConfig) {
         val request = call.receiveOrNull<AuthRequest>() ?: kotlin.run {
             call.respond(HttpStatusCode.BadRequest)
             return@login
@@ -60,7 +59,7 @@ class AuthController(private val call: ApplicationCall) {
         call.respond(status = HttpStatusCode.OK, message = AuthResponse(token))
     }
 
-    suspend fun register() {
+    suspend fun register(tokenConfig: TokenConfig) {
         val request = call.receiveOrNull<AuthRequest>() ?: kotlin.run {
             call.respond(HttpStatusCode.BadRequest)
             return@register
