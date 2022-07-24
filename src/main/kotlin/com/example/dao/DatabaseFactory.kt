@@ -1,8 +1,13 @@
-package com.example.data.dao
+package com.example.dao
 
+import com.example.dao.tables.Users
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
+import kotlinx.coroutines.Dispatchers
 import org.jetbrains.exposed.sql.Database
+import org.jetbrains.exposed.sql.SchemaUtils
+import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransaction
+import org.jetbrains.exposed.sql.transactions.transaction
 
 object DatabaseFactory {
     fun init() { //config: ApplicationConfig
@@ -21,11 +26,13 @@ object DatabaseFactory {
 
         val config = HikariConfig("hikari.properties")
         val dataSource = HikariDataSource(config)
-        Database.connect(dataSource)
+        val database = Database.connect(dataSource)
 
-//        transaction(database) {
-//            SchemaUtils.create(Nodes)
-//            SchemaUtils.create(Users)
-//        }
+        transaction(database) {
+            SchemaUtils.create(Users)
+        }
     }
+
+    suspend fun <T> dbQuery(block: suspend () -> T): T =
+        newSuspendedTransaction(Dispatchers.IO) { block() }
 }

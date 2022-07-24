@@ -1,32 +1,39 @@
 package com.example
 
-import com.example.data.dao.DatabaseFactory
+import com.example.dao.DatabaseFactory
+import com.example.di.authModule
+import com.example.di.dbModule
 import com.example.plugins.configureMonitoring
 import com.example.plugins.configureRouting
 import com.example.plugins.configureSecurity
 import com.example.plugins.configureSerialization
-import com.example.security.hashing.SHA256HashingService
-import com.example.security.token.JwtTokenService
 import com.example.security.token.TokenConfig
 import io.ktor.server.application.*
+import io.ktor.server.netty.*
+import org.koin.core.context.startKoin
 
-fun main(args: Array<String>): Unit = io.ktor.server.netty.EngineMain.main(args)
+fun main(args: Array<String>) {
+    startKoin { modules(authModule, dbModule) }
+    DatabaseFactory.init()
+    EngineMain.main(args)
+}
 
 @Suppress("unused") // application.conf references the main function. This annotation prevents the IDE from marking it as unused.
 fun Application.module() {
-    DatabaseFactory.init()
+    org.koin.dsl.module {
+        single {
+            TokenConfig(
+                issuer = environment.config.property("jwt.issuer").getString(),
+                audience = environment.config.property("jwt.audience").getString(),
+                expiresIn = 365L * 1000L * 60L * 60L * 24L,
+                secret = environment.config.property("jwt.secret").getString()
+            )
+        }
+    }
 
-    val tokenService = JwtTokenService()
-    val tokenConfig = TokenConfig(
-        issuer = environment.config.property("jwt.issuer").getString(),
-        audience = environment.config.property("jwt.audience").getString(),
-        expiresIn = 365L * 1000L * 60L * 60L * 24L,
-        secret = environment.config.property("jwt.secret").getString()) //System.getenv("JWT_SECRET")
-    val hashingService = SHA256HashingService()
-
-    configureRouting(hashingService, tokenService, tokenConfig) //userDataSource,
+    configureRouting()
+    configureSecurity()
     configureSerialization()
     configureMonitoring()
-    configureSecurity(tokenConfig)
 }
 
