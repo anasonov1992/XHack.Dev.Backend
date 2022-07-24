@@ -1,42 +1,58 @@
 package com.example
 
-import io.ktor.server.routing.*
-import io.ktor.http.*
-import io.ktor.server.websocket.*
-import io.ktor.websocket.*
-import java.time.Duration
-import io.ktor.serialization.kotlinx.json.*
-import io.ktor.server.plugins.contentnegotiation.*
-import io.ktor.server.plugins.callloging.*
-import org.slf4j.event.*
-import io.ktor.server.request.*
-import io.ktor.server.auth.*
-import io.ktor.util.*
-import io.ktor.server.locations.*
+import com.example.dao.DatabaseFactory
+import com.example.data.requests.AuthRequest
+import com.example.di.authModule
+import com.example.di.dbModule
+import com.example.plugins.configureMonitoring
+import com.example.plugins.configureRouting
+import com.example.plugins.configureSecurity
+import com.example.plugins.configureSerialization
 import io.ktor.client.*
-import io.ktor.client.engine.apache.*
-import io.ktor.server.sessions.*
-import io.ktor.server.auth.jwt.*
-import com.auth0.jwt.JWT
-import com.auth0.jwt.JWTVerifier
-import com.auth0.jwt.algorithms.Algorithm
-import io.ktor.server.application.*
-import io.ktor.server.response.*
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
-import kotlin.test.*
+import io.ktor.http.*
+import io.ktor.serialization.kotlinx.json.*
+import io.ktor.server.plugins.contentnegotiation.*
 import io.ktor.server.testing.*
-import com.example.plugins.*
+import org.koin.core.context.startKoin
+import kotlin.test.Test
+import kotlin.test.assertEquals
 
 class ApplicationTest {
-//    @Test
-//    fun testRoot() = testApplication {
-//        application {
-//            configureRouting()
-//        }
-//        client.get("/").apply {
-//            assertEquals(HttpStatusCode.OK, status)
-//            assertEquals("Hello World!", bodyAsText())
-//        }
-//    }
+    @Test
+    fun testRoot() = testApplication {
+        startKoin { modules(authModule, dbModule) }
+        DatabaseFactory.init()
+
+        application {
+            configureRouting()
+            configureSecurity()
+            configureSerialization()
+        }
+
+        val client = createClient {
+            this@testApplication.install(ContentNegotiation) {
+                json()
+            }
+        }
+
+        loginTest(client)
+    }
+
+    private suspend fun ApplicationTestBuilder.helloWorldTest() {
+        client.get("/").apply {
+            assertEquals(HttpStatusCode.OK, status)
+            assertEquals("Hello, World!", bodyAsText())
+        }
+    }
+
+    private suspend fun ApplicationTestBuilder.loginTest(client: HttpClient) {
+        client.post("/login") {
+            contentType(ContentType.Application.Json)
+            setBody(AuthRequest("tony", "power"))
+        }.apply {
+            assertEquals(HttpStatusCode.Conflict, status)
+        }
+    }
 }
