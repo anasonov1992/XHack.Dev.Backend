@@ -68,7 +68,7 @@ class AuthController(private val call: ApplicationCall) {
         val areFieldsBlank = request.username.isBlank() || request.password.isBlank()
         val isPwTooShort = request.password.length < minPasswordLength
         if(areFieldsBlank || isPwTooShort) {
-            call.respond(HttpStatusCode.Conflict)
+            call.respond(HttpStatusCode.Conflict, "Incorrect username or password")
             return@register
         }
 
