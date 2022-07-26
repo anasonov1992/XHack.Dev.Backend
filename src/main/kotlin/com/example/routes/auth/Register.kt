@@ -6,7 +6,7 @@ import io.ktor.server.application.*
 import io.ktor.server.routing.*
 
 fun Route.register(tokenConfig: TokenConfig) {
-    post("/register") {
+    post("/api/register") {
         val controller = AuthController(call)
         controller.register(tokenConfig)
     }

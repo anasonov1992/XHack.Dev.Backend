@@ -56,7 +56,7 @@ class AuthController(private val call: ApplicationCall) {
             )
         )
 
-        call.respond(status = HttpStatusCode.OK, message = AuthResponse(token))
+        call.respond(HttpStatusCode.OK, AuthResponse(token))
     }
 
     suspend fun register(tokenConfig: TokenConfig) {
