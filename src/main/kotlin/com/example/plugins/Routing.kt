@@ -2,6 +2,7 @@ package com.example.plugins
 
 import com.example.routes.auth.login
 import com.example.routes.auth.register
+import com.example.routes.files.upload
 import com.example.utils.configureToken
 import io.ktor.server.application.*
 import io.ktor.server.response.*
@@ -18,5 +19,6 @@ fun Application.configureRouting() {
         }
         login(tokenConfig)
         register(tokenConfig)
+        upload(tokenConfig)
     }
 }
