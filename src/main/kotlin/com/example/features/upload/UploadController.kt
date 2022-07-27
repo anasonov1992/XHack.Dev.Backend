@@ -1,5 +1,7 @@
 package com.example.features.upload
 
+import com.example.data.responses.UploadFileResponse
+import com.example.utils.Constants
 import io.ktor.http.*
 import io.ktor.http.content.*
 import io.ktor.server.application.*
@@ -29,6 +31,6 @@ class UploadController(private val call: ApplicationCall) {
             }
         }
 
-        call.respond(HttpStatusCode.OK, "$fileDescription is uploaded to 'uploads/$fileName'")
+        call.respond(HttpStatusCode.OK, UploadFileResponse("${Constants.BASE_URL}/uploads/$fileName"))
     }
 }
