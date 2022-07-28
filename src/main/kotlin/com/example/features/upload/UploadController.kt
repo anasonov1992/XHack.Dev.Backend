@@ -25,7 +25,7 @@ class UploadController(private val call: ApplicationCall) {
                     var fileBytes = part.streamProvider().readBytes()
                     val fileExtension = part.originalFileName?.takeLastWhile { it != '.' }
                     val fileName = "${UUID.randomUUID()}.$fileExtension"
-                    val filePath = "$Constants.BASE_URL/$Constants.UPLOAD_PATH/$fileName"
+                    val filePath = "${Constants.BASE_URL}/${Constants.UPLOAD_PATH}/${fileName}"
                     File(filePath).writeBytes(fileBytes)
                 }
                 else -> {
