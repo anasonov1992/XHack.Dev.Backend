@@ -8,11 +8,12 @@ import io.ktor.server.application.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import java.io.File
+import java.util.*
 
 class UploadController(private val call: ApplicationCall) {
     suspend fun upload() {
         var fileDescription = ""
-        var fileName = ""
+        var filePath = ""
         val multipartData = call.receiveMultipart()
 
         multipartData.forEachPart { part ->
@@ -21,9 +22,11 @@ class UploadController(private val call: ApplicationCall) {
                     fileDescription = part.value
                 }
                 is PartData.FileItem -> {
-                    fileName = part.originalFileName as String
                     var fileBytes = part.streamProvider().readBytes()
-                    File("uploads/$fileName").writeBytes(fileBytes)
+                    val fileExtension = part.originalFileName?.takeLastWhile { it != '.' }
+                    val fileName = "${UUID.randomUUID()}.$fileExtension"
+                    val filePath = "$Constants.BASE_URL/$Constants.UPLOAD_PATH/$fileName"
+                    File(filePath).writeBytes(fileBytes)
                 }
                 else -> {
                     call.respond(HttpStatusCode.BadRequest, "Wrong uploaded file format")
@@ -31,6 +34,6 @@ class UploadController(private val call: ApplicationCall) {
             }
         }
 
-        call.respond(HttpStatusCode.OK, UploadFileResponse("${Constants.BASE_URL}/uploads/$fileName"))
+        call.respond(HttpStatusCode.OK, UploadFileResponse(filePath))
     }
 }
