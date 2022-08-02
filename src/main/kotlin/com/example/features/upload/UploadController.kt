@@ -32,8 +32,7 @@ class UploadController(private val call: ApplicationCall) {
                             val folder = File(filePath)
                             if (!folder.exists()) {
                                 println("filePath: $filePath doesn't exist")
-                                folder.mkdir()
-                                println("filePath: $filePath exists: ${folder.exists()}")
+                                println("filePath: $filePath exists: ${folder.mkdir()}")
                             }
 
                             val uploadedFile = File("${filePath}/${fileName}")
