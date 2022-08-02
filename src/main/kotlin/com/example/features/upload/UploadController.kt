@@ -25,8 +25,19 @@ class UploadController(private val call: ApplicationCall) {
                         part.streamProvider().use {
                             var fileBytes = it.readBytes()
                             fileName = part.originalFileName!!
-                            filePath = "${Constants.BASE_URL}/${Constants.UPLOAD_PATH}"
-                            File("${filePath}/${fileName}").writeBytes(fileBytes)
+                            filePath = "${Constants.UPLOAD_PATH}"
+
+                            println("fileName: $fileName")
+
+                            val folder = File(filePath)
+                            if (!folder.exists()) {
+                                println("filePath: $filePath doesn't exist")
+                                folder.mkdir()
+                                println("filePath: $filePath exists: ${folder.exists()}")
+                            }
+
+                            val uploadedFile = File("${filePath}/${fileName}")
+                            uploadedFile.writeBytes(fileBytes)
                         }
                     }
 
@@ -38,6 +49,6 @@ class UploadController(private val call: ApplicationCall) {
             }
         }
 
-        call.respond(HttpStatusCode.OK, UploadFileResponse("${filePath}/${fileName}"))
+        call.respond(HttpStatusCode.OK, UploadFileResponse("${Constants.BASE_URL}${filePath}/${fileName}"))
     }
 }
