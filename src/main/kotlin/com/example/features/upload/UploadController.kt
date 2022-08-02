@@ -48,6 +48,6 @@ class UploadController(private val call: ApplicationCall) {
             }
         }
 
-        call.respond(HttpStatusCode.OK, UploadFileResponse("${Constants.BASE_URL}${filePath}/${fileName}"))
+        call.respond(HttpStatusCode.OK, UploadFileResponse("${Constants.BASE_URL}/${filePath}/${fileName}"))
     }
 }
