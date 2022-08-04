@@ -11,23 +11,27 @@ import org.jetbrains.exposed.sql.select
 class UserDataSourceImpl : UserDataSource {
     private fun resultRowToNode(row: ResultRow) = User(
         id = row[Users.id],
-        username = row[Users.username],
+        firstName = row[Users.firstName],
+        lastName = row[Users.lastName],
+        email = row[Users.email],
         password = row[Users.password],
         salt = row[Users.salt]
     )
 
     override suspend fun createUser(user: User): User? = dbQuery{
         val insertStatement = Users.insert {
-            it[username] = user.username
+            it[firstName] = user.firstName
+            it[lastName] = user.lastName
+            it[email] = user.email
             it[password] = user.password
             it[salt] = user.salt
         }
         insertStatement.resultedValues?.singleOrNull()?.let(::resultRowToNode)
     }
 
-    override suspend fun getByUsername(username: String): User? = dbQuery {
+    override suspend fun getByEmail(email: String): User? = dbQuery {
         Users
-            .select { Users.username eq username }
+            .select { Users.email eq email }
             .map(::resultRowToNode).singleOrNull()
     }
 }

@@ -3,6 +3,7 @@ package com.example.features.auth
 import com.example.dao.interfaces.UserDataSource
 import com.example.dao.models.User
 import com.example.data.requests.AuthRequest
+import com.example.data.requests.RegisterUserRequest
 import com.example.data.responses.AuthResponse
 import com.example.security.hashing.HashingService
 import com.example.security.hashing.SaltedHash
@@ -29,9 +30,9 @@ class AuthController(private val call: ApplicationCall) {
             return@login
         }
 
-        val user = userDataSource.getByUsername(request.username)
+        val user = userDataSource.getByEmail(request.email)
         if (user == null) {
-            call.respond(HttpStatusCode.Conflict, "Incorrect username or password")
+            call.respond(HttpStatusCode.Conflict, "Incorrect email or password")
             return@login
         }
 
@@ -44,7 +45,7 @@ class AuthController(private val call: ApplicationCall) {
         )
         if (!isValidPassword) {
             println("Entered hash: ${DigestUtils.sha256Hex("${user.salt}${request.password}")}, Hashed PW: ${user.password}")
-            call.respond(HttpStatusCode.Conflict, "Incorrect username or password")
+            call.respond(HttpStatusCode.Conflict, "Incorrect email or password")
             return@login
         }
 
@@ -60,21 +61,27 @@ class AuthController(private val call: ApplicationCall) {
     }
 
     suspend fun register(tokenConfig: TokenConfig) {
-        val request = call.receiveOrNull<AuthRequest>() ?: kotlin.run {
+        val request = call.receiveOrNull<RegisterUserRequest>() ?: kotlin.run {
             call.respond(HttpStatusCode.BadRequest)
             return@register
         }
 
-        val areFieldsBlank = request.username.isBlank() || request.password.isBlank()
+        val areFieldsBlank = request.firstName.isBlank()
+                || request.lastName.isBlank()
+                || request.email.isBlank()
+                || request.password.isBlank()
         val isPwTooShort = request.password.length < minPasswordLength
-        if(areFieldsBlank || isPwTooShort) {
-            call.respond(HttpStatusCode.Conflict, "Incorrect username or password")
+
+        if (areFieldsBlank || isPwTooShort) {
+            call.respond(HttpStatusCode.Conflict, "Incorrect email or password")
             return@register
         }
 
         val saltedHash = hashingService.generateHash(request.password)
         val user = User(
-            username = request.username,
+            firstName = request.firstName,
+            lastName = request.lastName,
+            email = request.email,
             password = saltedHash.hash,
             salt = saltedHash.salt
         )
