@@ -4,7 +4,7 @@ import com.example.dao.interfaces.UserDataSource
 import com.example.dao.models.User
 import com.example.data.requests.AuthRequest
 import com.example.data.requests.RegisterUserRequest
-import com.example.data.responses.AuthResponse
+import com.example.data.responses.TokenResponse
 import com.example.security.hashing.HashingService
 import com.example.security.hashing.SaltedHash
 import com.example.security.token.TokenClaim
@@ -49,15 +49,7 @@ class AuthController(private val call: ApplicationCall) {
             return@login
         }
 
-        val token = tokenService.generate(
-            config = tokenConfig,
-            TokenClaim(
-                name = "userId",
-                value = user.id.toString()
-            )
-        )
-
-        call.respond(HttpStatusCode.OK, AuthResponse(token))
+        call.respond(HttpStatusCode.OK, getTokenResponse(tokenConfig, user.id.toString()))
     }
 
     suspend fun register(tokenConfig: TokenConfig) {
@@ -77,6 +69,11 @@ class AuthController(private val call: ApplicationCall) {
             return@register
         }
 
+        if (userDataSource.getByEmail(request.email) != null) {
+            call.respond(HttpStatusCode.Conflict, "Email already exists. Please specify another one.")
+            return@register
+        }
+
         val saltedHash = hashingService.generateHash(request.password)
         val user = User(
             firstName = request.firstName,
@@ -85,12 +82,22 @@ class AuthController(private val call: ApplicationCall) {
             password = saltedHash.hash,
             salt = saltedHash.salt
         )
-        val wasAcknowledged = userDataSource.createUser(user)
-        if(wasAcknowledged == null)  {
-            call.respond(HttpStatusCode.Conflict)
+        if (userDataSource.createUser(user) == null)  {
+            call.respond(HttpStatusCode.Conflict, "An error happened during account creation.")
             return@register
         }
 
-        call.respond(HttpStatusCode.OK)
+        call.respond(HttpStatusCode.OK, getTokenResponse(tokenConfig, user.id.toString()))
+    }
+
+    private fun getTokenResponse(tokenConfig: TokenConfig, tokenClaimValue: String): TokenResponse {
+        val token = tokenService.generate(
+            config = tokenConfig,
+            TokenClaim(
+                name = "userId",
+                value = tokenClaimValue
+            )
+        )
+        return TokenResponse(token)
     }
 }
