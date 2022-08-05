@@ -1,7 +1,7 @@
 package com.example.features.auth
 
-import com.example.dao.interfaces.UserDataSource
-import com.example.dao.models.User
+import com.example.dao.interfaces.UsersDataSource
+import com.example.data.models.UserDto
 import com.example.data.requests.AuthRequest
 import com.example.data.requests.RegisterUserRequest
 import com.example.data.responses.TokenResponse
@@ -20,7 +20,7 @@ import org.koin.java.KoinJavaComponent.inject
 class AuthController(private val call: ApplicationCall) {
     private val minPasswordLength = 8
 
-    private val userDataSource by inject<UserDataSource>(UserDataSource::class.java)
+    private val userDataSource by inject<UsersDataSource>(UsersDataSource::class.java)
     private val hashingService by inject<HashingService>(HashingService::class.java)
     private val tokenService by inject<TokenService>(TokenService::class.java)
 
@@ -75,7 +75,7 @@ class AuthController(private val call: ApplicationCall) {
         }
 
         val saltedHash = hashingService.generateHash(request.password)
-        val user = User(
+        val user = UserDto(
             firstName = request.firstName,
             lastName = request.lastName,
             email = request.email,
