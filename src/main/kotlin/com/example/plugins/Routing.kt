@@ -20,7 +20,7 @@ fun Application.configureRouting() {
         }
         login(tokenConfig)
         register(tokenConfig)
-        getRequests(tokenConfig)
+        getRequests()
         upload(tokenConfig)
     }
 }

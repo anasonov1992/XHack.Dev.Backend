@@ -1,26 +1,25 @@
 package com.example.features.requests
 
-import com.example.dao.interfaces.UsersDataSource
-import com.example.data.requests.PagingRequest
+import com.example.dao.interfaces.RequestsDataSource
+import com.example.dao.mappers.toTeamRequestDto
+import com.example.dao.mappers.toUserRequestDto
 import com.example.data.responses.RequestResponseDto
-import com.example.security.token.TokenConfig
 import io.ktor.http.*
 import io.ktor.server.application.*
-import io.ktor.server.request.*
 import io.ktor.server.response.*
 import org.koin.java.KoinJavaComponent
 
 class RequestsController(private val call: ApplicationCall) {
-    private val userDataSource by KoinJavaComponent.inject<UsersDataSource>(UsersDataSource::class.java)
+    private val requestsDataSource by KoinJavaComponent.inject<RequestsDataSource>(RequestsDataSource::class.java)
 
-    suspend fun getRequests(tokenConfig: TokenConfig) {
-        val request = call.receiveOrNull<PagingRequest>() ?: kotlin.run {
-            call.respond(HttpStatusCode.BadRequest)
-            return@getRequests
+    suspend fun getRequests() {
+        val response = requestsDataSource.getRequests().run {
+            RequestResponseDto(
+                fromTeams = filter { it.team != null }.map { it.toTeamRequestDto() },
+                fromUsers = filter { it.user != null }.map { it.toUserRequestDto() }
+            )
         }
 
-
-
-        call.respond(HttpStatusCode.OK, RequestResponseDto())
+        call.respond(HttpStatusCode.OK, response)
     }
 }

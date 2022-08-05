@@ -6,15 +6,12 @@ import com.example.dao.entities.Team
 import com.example.dao.entities.User
 import com.example.dao.interfaces.RequestsDataSource
 import com.example.data.models.RequestDto
-import com.example.data.requests.PagingRequest
 import com.example.primitives.RequestType
 
 class RequestsDataSourceImpl: RequestsDataSource {
     //Use DAO
-    override suspend fun getRequests(request: PagingRequest): List<Request> = dbQuery {
-        request.run {
-            Request.all().limit(pageSize, pageNumber).toList()
-        }
+    override suspend fun getRequests(): List<Request> = dbQuery {
+        Request.all().toList()
     }
 
     //Use DAO
@@ -22,22 +19,24 @@ class RequestsDataSourceImpl: RequestsDataSource {
         dbQuery {
             when (request.type) {
                 RequestType.UserToTeam -> {
-                    val requestedUser = User.findById(request.user.id)
-                    requestedUser?.let {
-                        Request.new {
-                            user = requestedUser
-                            type = request.type
-                            isCanceled = request.isCanceled
+                    request.user?.let {
+                        User.findById(request.user.id)?.let {
+                            Request.new {
+                                user = it
+                                type = request.type
+                                isCanceled = request.isCanceled
+                            }
                         }
                     }
                 }
                 RequestType.TeamToUser -> {
-                    val requestedTeam = Team.findById(request.team.id)
-                    requestedTeam?.let {
-                        Request.new {
-                            team = requestedTeam
-                            type = request.type
-                            isCanceled = request.isCanceled
+                    request.team?.let {
+                        Team.findById(request.team.id)?.let {
+                            Request.new {
+                                team = it
+                                type = request.type
+                                isCanceled = request.isCanceled
+                            }
                         }
                     }
                 }
