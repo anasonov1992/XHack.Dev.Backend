@@ -1,6 +1,6 @@
-package com.example.dao.models
+package com.example.data.models
 
-data class User(
+data class UserDto(
     val id: Int = 0,
     val firstName: String,
     val lastName: String,

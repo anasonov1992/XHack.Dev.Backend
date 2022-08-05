@@ -1,5 +1,7 @@
 package com.example.dao
 
+import com.example.dao.tables.Requests
+import com.example.dao.tables.Teams
 import com.example.dao.tables.Users
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
@@ -29,7 +31,9 @@ object DatabaseFactory {
         val database = Database.connect(dataSource)
 
         transaction(database) {
-            SchemaUtils.create(Users)
+            //FIXME use
+//            SchemaUtils.drop(Users, Teams, Requests)
+            SchemaUtils.create(Users, Teams, Requests)
         }
     }
 
