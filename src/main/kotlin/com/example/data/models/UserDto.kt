@@ -1,5 +1,6 @@
 package com.example.data.models
 
+@kotlinx.serialization.Serializable
 data class UserDto(
     val id: Int = 0,
     val firstName: String,
