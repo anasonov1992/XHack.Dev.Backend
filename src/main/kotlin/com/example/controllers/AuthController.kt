@@ -1,4 +1,4 @@
-package com.example.features.auth
+package com.example.controllers
 
 import com.example.dao.interfaces.UsersDataSource
 import com.example.data.models.UserDto
@@ -10,6 +10,7 @@ import com.example.security.hashing.SaltedHash
 import com.example.security.token.TokenClaim
 import com.example.security.token.TokenConfig
 import com.example.security.token.TokenService
+import com.example.utils.Constants
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.request.*
@@ -33,7 +34,7 @@ class AuthController(private val call: ApplicationCall) {
         val user = userDataSource.getByEmail(request.email)
         if (user == null) {
             call.respond(HttpStatusCode.Conflict, "Incorrect email or password")
-            return@login
+            return
         }
 
         val isValidPassword = hashingService.verify(
@@ -46,7 +47,7 @@ class AuthController(private val call: ApplicationCall) {
         if (!isValidPassword) {
             println("Entered hash: ${DigestUtils.sha256Hex("${user.salt}${request.password}")}, Hashed PW: ${user.password}")
             call.respond(HttpStatusCode.Conflict, "Incorrect email or password")
-            return@login
+            return
         }
 
         call.respond(HttpStatusCode.OK, getTokenResponse(tokenConfig, user.id.toString()))
@@ -66,12 +67,12 @@ class AuthController(private val call: ApplicationCall) {
 
         if (areFieldsBlank || isPwTooShort) {
             call.respond(HttpStatusCode.Conflict, "Incorrect email or password")
-            return@register
+            return
         }
 
         if (userDataSource.getByEmail(request.email) != null) {
             call.respond(HttpStatusCode.Conflict, "Email already exists. Please specify another one.")
-            return@register
+            return
         }
 
         val saltedHash = hashingService.generateHash(request.password)
@@ -84,17 +85,19 @@ class AuthController(private val call: ApplicationCall) {
         )
         if (userDataSource.createUser(user) == null)  {
             call.respond(HttpStatusCode.Conflict, "An error happened during account creation.")
-            return@register
+            return
         }
 
         call.respond(HttpStatusCode.OK, getTokenResponse(tokenConfig, user.id.toString()))
     }
 
     private fun getTokenResponse(tokenConfig: TokenConfig, tokenClaimValue: String): TokenResponse {
+        println("tokenClaimValue: $tokenClaimValue")
+
         val token = tokenService.generate(
             config = tokenConfig,
             TokenClaim(
-                name = "userId",
+                name = Constants.USER_CLAIM_NAME,
                 value = tokenClaimValue
             )
         )
