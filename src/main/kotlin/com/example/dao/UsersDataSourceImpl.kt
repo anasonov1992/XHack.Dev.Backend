@@ -3,11 +3,9 @@ package com.example.dao
 import com.example.dao.DatabaseFactory.dbQuery
 import com.example.dao.entities.User
 import com.example.dao.interfaces.UsersDataSource
-import com.example.data.models.UserDto
+import com.example.dao.mappers.toUserDto
 import com.example.dao.tables.Users
-import org.jetbrains.exposed.sql.ResultRow
-import org.jetbrains.exposed.sql.insert
-import org.jetbrains.exposed.sql.select
+import com.example.data.models.UserDto
 
 class UsersDataSourceImpl : UsersDataSource {
     // Using SQL DSL
@@ -20,7 +18,19 @@ class UsersDataSourceImpl : UsersDataSource {
 //        salt = row[Users.salt]
 //    )
 
-    override suspend fun createUser(user: UserDto): User = dbQuery {
+    override suspend fun getUsers(): List<UserDto> = dbQuery {
+        User.all().map { it.toUserDto() }.toList()
+    }
+
+    override suspend fun getByEmail(email: String): UserDto? = dbQuery {
+        // Using SQL DSL
+//        Users.select { Users.email eq email }.map(::resultRowToNode).singleOrNull()
+
+        //Use DAO
+        User.find { Users.email eq email }.map { it.toUserDto() }.firstOrNull()
+    }
+
+    override suspend fun createUser(user: UserDto): UserDto = dbQuery {
         // Using SQL DSL
 //        val insertStatement = Users.insert {
 //            it[firstName] = user.firstName
@@ -38,14 +48,6 @@ class UsersDataSourceImpl : UsersDataSource {
             email = user.email
             password = user.password
             salt = user.salt
-        }
-    }
-
-    override suspend fun getByEmail(email: String): User? = dbQuery {
-        // Using SQL DSL
-//        Users.select { Users.email eq email }.map(::resultRowToNode).singleOrNull()
-
-        //Use DAO
-        User.find { Users.email eq email }.firstOrNull()
+        }.toUserDto()
     }
 }
