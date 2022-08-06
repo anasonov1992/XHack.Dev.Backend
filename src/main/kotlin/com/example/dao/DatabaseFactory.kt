@@ -32,7 +32,7 @@ object DatabaseFactory {
 
         transaction(database) {
             //FIXME use
-//            SchemaUtils.drop(Users, Teams, Requests)
+//            SchemaUtils.drop(Requests)
             SchemaUtils.create(Users, Teams, Requests)
         }
     }

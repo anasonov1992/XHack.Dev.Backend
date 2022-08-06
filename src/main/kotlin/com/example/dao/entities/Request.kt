@@ -8,8 +8,9 @@ import org.jetbrains.exposed.dao.id.EntityID
 class Request(id: EntityID<Int>) : IntEntity(id) {
     companion object : IntEntityClass<Request>(Requests)
 
-    var user by User optionalReferencedOn Requests.user
-    var team by Team optionalReferencedOn Requests.team
+    var invitedUserId by Requests.invitedUserId
+    var fromUser by User optionalReferencedOn Requests.fromUser
+    var fromTeam by Team optionalReferencedOn Requests.fromTeam
     var type by Requests.type
     var isCanceled by Requests.isCanceled
 }
