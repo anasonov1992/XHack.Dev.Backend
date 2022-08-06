@@ -1,11 +1,12 @@
 package com.example.plugins
 
+import com.example.routes.*
 import com.example.routes.auth.login
 import com.example.routes.auth.register
 import com.example.routes.files.upload
-import com.example.routes.getRequests
 import com.example.utils.configureToken
 import io.ktor.server.application.*
+import io.ktor.server.auth.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 
@@ -18,9 +19,17 @@ fun Application.configureRouting() {
         get("/test") {
             call.respondText("Testing...")
         }
+
         login(tokenConfig)
         register(tokenConfig)
-        getRequests()
-        upload(tokenConfig)
+
+        authenticate("auth-jwt") {
+            getRequests()
+            createRequest()
+            getTeams()
+            createTeam()
+            getUsers()
+            upload(tokenConfig)
+        }
     }
 }

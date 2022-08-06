@@ -1,6 +1,6 @@
 package com.example.routes.files
 
-import com.example.features.upload.UploadController
+import com.example.controllers.UploadController
 import com.example.security.token.TokenConfig
 import io.ktor.server.application.*
 import io.ktor.server.routing.*
