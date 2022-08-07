@@ -41,8 +41,10 @@ dependencies {
     implementation("org.jetbrains.exposed:exposed-core:$exposed_version")
     implementation("org.jetbrains.exposed:exposed-dao:$exposed_version")
     implementation("org.jetbrains.exposed:exposed-jdbc:$exposed_version")
+    implementation("org.jetbrains.exposed:exposed-java-time:$exposed_version")
     implementation ("io.insert-koin:koin-ktor:3.2.0")
     implementation ("io.insert-koin:koin-logger-slf4j:3.2.0")
+    implementation ("org.jetbrains.kotlinx:kotlinx-datetime:0.4.0")
 
     implementation("ch.qos.logback:logback-classic:$logback_version")
     testImplementation("io.ktor:ktor-server-test-host:$ktor_version")
