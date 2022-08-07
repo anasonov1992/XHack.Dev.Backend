@@ -29,6 +29,10 @@ fun Application.configureRouting() {
             getTeams()
             createTeam()
             getUsers()
+            getHackathons()
+            createHackathon()
+            getTags()
+            addTag()
             upload(tokenConfig)
         }
     }

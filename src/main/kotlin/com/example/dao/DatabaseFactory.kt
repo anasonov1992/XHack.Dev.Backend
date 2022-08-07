@@ -1,8 +1,6 @@
 package com.example.dao
 
-import com.example.dao.tables.Requests
-import com.example.dao.tables.Teams
-import com.example.dao.tables.Users
+import com.example.dao.tables.*
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
 import kotlinx.coroutines.Dispatchers
@@ -33,7 +31,7 @@ object DatabaseFactory {
         transaction(database) {
             //FIXME use
 //            SchemaUtils.drop(Requests)
-            SchemaUtils.create(Users, Teams, Requests)
+            SchemaUtils.create(Users, Teams, Requests, Hackathons, Tags, HackathonsTags)
         }
     }
 

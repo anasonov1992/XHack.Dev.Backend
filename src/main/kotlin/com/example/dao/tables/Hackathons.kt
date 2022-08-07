@@ -10,6 +10,4 @@ object Hackathons: IntIdTable()  {
     val siteUrl = varchar("siteUrl", 128)
     val avatarUrl = varchar("avatarUrl", 128)
     val isBookmarked = bool("isBookmarked")
-    //TODO многие ко многим для таблицы Tags
-    //    val tags: List<TagDto>,
 }
