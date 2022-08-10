@@ -9,16 +9,20 @@ import com.example.dao.mappers.toTagDto
 import com.example.dao.tables.Tags
 import com.example.data.models.HackathonDto
 import com.example.data.models.TagDto
-import com.example.data.requests.PagingRequest
+import com.example.data.responses.HackathonsResponseDto
 import com.example.utils.MocksGenerator
 import org.jetbrains.exposed.sql.SizedCollection
 
 class HackathonsDataSourceImpl: HackathonsDataSource {
-    override suspend fun getHackathons(request: PagingRequest): List<HackathonDto> = dbQuery {
+    override suspend fun getHackathons(): HackathonsResponseDto = dbQuery {
         //Use DAO
-        request.run {
-            Hackathon.all().limit(pageSize, pageNumber * pageSize).map { it.toHackathonDto() }.toList()
-        }
+       Hackathon.all().map { it.toHackathonDto() }.run {
+           HackathonsResponseDto(
+               topHackathons = this,
+               popularHackathons = this,
+               recentHackathons = this
+           )
+       }
     }
 
     override suspend fun createHackathon(hackathon: HackathonDto): HackathonDto = dbQuery {

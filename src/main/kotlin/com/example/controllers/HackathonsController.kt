@@ -1,11 +1,8 @@
 package com.example.controllers
 
 import com.example.dao.interfaces.HackathonsDataSource
-import com.example.dao.interfaces.RequestsDataSource
 import com.example.data.models.HackathonDto
 import com.example.data.models.TagDto
-import com.example.data.models.TeamDto
-import com.example.data.requests.PagingRequest
 import com.example.utils.Constants
 import io.ktor.http.*
 import io.ktor.server.application.*
@@ -25,12 +22,7 @@ class HackathonsController(private val call: ApplicationCall) {
             return
         }
 
-        val request = call.receiveOrNull<PagingRequest>() ?: kotlin.run {
-            call.respond(HttpStatusCode.BadRequest)
-            return@getHackathons
-        }
-
-        call.respond(HttpStatusCode.OK, hackathonsDataSource.getHackathons(request))
+        call.respond(HttpStatusCode.OK, hackathonsDataSource.getHackathons())
     }
 
     suspend fun createHackathon() {

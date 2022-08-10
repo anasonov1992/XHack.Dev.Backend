@@ -5,7 +5,7 @@ import io.ktor.server.application.*
 import io.ktor.server.routing.*
 
 fun Route.getHackathons() {
-    post("/api/getHackathons") {
+    get("/api/getHackathons") {
         val controller = HackathonsController(call)
         controller.getHackathons()
     }
