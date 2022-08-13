@@ -2,8 +2,8 @@ package com.example.controllers
 
 import com.example.dao.interfaces.UsersDataSource
 import com.example.data.models.UserDto
-import com.example.data.requests.AuthRequest
-import com.example.data.requests.RegisterUserRequest
+import com.example.data.requests.AuthRequestDto
+import com.example.data.requests.RegisterUserRequestDto
 import com.example.data.responses.TokenResponse
 import com.example.security.hashing.HashingService
 import com.example.security.hashing.SaltedHash
@@ -26,7 +26,7 @@ class AuthController(private val call: ApplicationCall) {
     private val tokenService by inject<TokenService>(TokenService::class.java)
 
     suspend fun login(tokenConfig: TokenConfig) {
-        val request = call.receiveOrNull<AuthRequest>() ?: kotlin.run {
+        val request = call.receiveOrNull<AuthRequestDto>() ?: kotlin.run {
             call.respond(HttpStatusCode.BadRequest)
             return@login
         }
@@ -54,7 +54,7 @@ class AuthController(private val call: ApplicationCall) {
     }
 
     suspend fun register(tokenConfig: TokenConfig) {
-        val request = call.receiveOrNull<RegisterUserRequest>() ?: kotlin.run {
+        val request = call.receiveOrNull<RegisterUserRequestDto>() ?: kotlin.run {
             call.respond(HttpStatusCode.BadRequest)
             return@register
         }

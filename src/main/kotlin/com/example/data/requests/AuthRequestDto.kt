@@ -1,9 +1,7 @@
 package com.example.data.requests
 
 @kotlinx.serialization.Serializable
-data class RegisterUserRequest(
-    val firstName: String,
-    val lastName: String,
+data class AuthRequestDto(
     val email: String,
     val password: String
 )

@@ -1,9 +1,6 @@
 package com.example.controllers
 
 import com.example.dao.interfaces.RequestsDataSource
-import com.example.dao.mappers.toRequestDto
-import com.example.dao.mappers.toTeamRequestDto
-import com.example.dao.mappers.toUserRequestDto
 import com.example.data.models.InviteUserDto
 import com.example.data.responses.RequestResponseDto
 import com.example.utils.Constants
@@ -24,8 +21,6 @@ class RequestsController(private val call: ApplicationCall) {
             call.respond(HttpStatusCode.Unauthorized, "User is unauthorized")
             return
         }
-
-        println("UserId: $userId")
 
         val response = requestsDataSource.getRequests(userId.toInt()).run {
             RequestResponseDto(

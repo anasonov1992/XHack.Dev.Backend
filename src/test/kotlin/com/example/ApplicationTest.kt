@@ -1,10 +1,9 @@
 package com.example
 
 import com.example.dao.DatabaseFactory
-import com.example.data.requests.AuthRequest
+import com.example.data.requests.AuthRequestDto
 import com.example.di.authModule
 import com.example.di.dbModule
-import com.example.plugins.configureMonitoring
 import com.example.plugins.configureRouting
 import com.example.plugins.configureSecurity
 import com.example.plugins.configureSerialization
@@ -50,7 +49,7 @@ class ApplicationTest {
     private suspend fun ApplicationTestBuilder.loginTest(client: HttpClient) {
         client.post("/login") {
             contentType(ContentType.Application.Json)
-            setBody(AuthRequest("tony", "power"))
+            setBody(AuthRequestDto("tony", "power"))
         }.apply {
             assertEquals(HttpStatusCode.Conflict, status)
         }
