@@ -1,8 +1,20 @@
 package com.example.utils
 
+import java.util.*
+
 object Constants {
+    //URLs
     const val BASE_URL = "https://xhack-backend.herokuapp.com"
     const val UPLOAD_PATH = "uploads"
     const val USER_CLAIM_NAME = "userId"
     const val IMAGE_MOCKS_URL = "https://picsum.photos"
+
+    //Errors
+    const val UNAUTHORIZED = "User is unauthorized"
+    const val INVALID_REQUEST = "Invalid request"
+    const val TEAM_NOT_FOUND = "Team is not found"
+    const val CHAT_NOT_FOUND = "Chat is not found"
+
+    //Texts
+    const val UNKNOWN_TEXT: String = "Unknown"
 }

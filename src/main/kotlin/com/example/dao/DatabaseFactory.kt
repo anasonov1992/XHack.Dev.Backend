@@ -31,7 +31,18 @@ object DatabaseFactory {
         transaction(database) {
             //FIXME use
 //            SchemaUtils.drop(Requests)
-            SchemaUtils.create(Users, Teams, Requests, Hackathons, Tags, HackathonsTags)
+            SchemaUtils.create(
+                Users,
+                Teams,
+                Requests,
+                Hackathons,
+                Tags,
+                HackathonsTags,
+                Chats,
+                ChatMessages,
+                ChatsUsers,
+                TeamsUsers
+            )
         }
     }
 

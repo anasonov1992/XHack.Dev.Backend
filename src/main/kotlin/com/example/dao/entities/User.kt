@@ -14,3 +14,7 @@ class User(id: EntityID<Int>) : IntEntity(id) {
     var password by Users.password
     var salt by Users.salt
 }
+
+val User.fullname
+    get() = "$firstName $lastName"
+

@@ -33,6 +33,12 @@ fun Application.configureRouting() {
             createHackathon()
             getTags()
             addTag()
+            getChats()
+            getChatMessages()
+            createP2PChat()
+            createTeamChat()
+            sendMessage()
+            deleteChat()
             upload(tokenConfig)
         }
     }
