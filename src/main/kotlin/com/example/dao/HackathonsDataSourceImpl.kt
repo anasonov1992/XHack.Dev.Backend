@@ -37,6 +37,8 @@ class HackathonsDataSourceImpl: HackathonsDataSource {
             description = hackathon.description
             isOnline = hackathon.isOnline
             location = hackathon.location
+//            startDate = hackathon.startDate
+//            endDate = hackathon.endDate
             siteUrl = hackathon.siteUrl
             avatarUrl = hackathon.avatarUrl ?: MocksGenerator.getRandomImageUrl() //FIXME
             isBookmarked = hackathon.isBookmarked

@@ -13,8 +13,9 @@ class Hackathon(id: EntityID<Int>) : IntEntity(id) {
     var description by Hackathons.description
     var isOnline by Hackathons.isOnline
     var location by Hackathons.location
-//    val startDate: datetime()
-//    val endDate: datetime()
+    //FIXME implement dates
+//    var startDate by Hackathons.startDate
+//    var endDate by Hackathons.endDate
     var siteUrl by Hackathons.siteUrl
     var avatarUrl by Hackathons.avatarUrl
     var isBookmarked by Hackathons.isBookmarked

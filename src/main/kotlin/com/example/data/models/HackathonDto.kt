@@ -1,6 +1,6 @@
 package com.example.data.models
 
-import kotlinx.datetime.Instant
+import kotlinx.datetime.LocalDateTime
 
 @kotlinx.serialization.Serializable
 data class HackathonDto(
@@ -9,8 +9,9 @@ data class HackathonDto(
     val description: String,
     val isOnline: Boolean,
     val location: String,
-//    val startDate: Instant,
-//    val endDate: Instant,
+    //FIXME possible fix dates
+//    val startDate: LocalDateTime,
+//    val endDate: LocalDateTime,
     val siteUrl: String,
     val avatarUrl: String? = null,
     val isBookmarked: Boolean,
