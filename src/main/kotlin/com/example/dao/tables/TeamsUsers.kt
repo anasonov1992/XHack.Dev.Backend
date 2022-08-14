@@ -1,8 +1,8 @@
 package com.example.dao.tables
 
-import org.jetbrains.exposed.sql.Table
+import org.jetbrains.exposed.dao.id.IntIdTable
 
-object TeamsUsers: Table() {
-    val team = reference("team", Teams)
-    val user = reference("user", Users)
+object TeamsUsers: IntIdTable() {
+    var team = reference("team", Teams)
+    var user = reference("user", Users)
 }

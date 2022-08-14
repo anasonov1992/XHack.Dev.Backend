@@ -1,5 +1,6 @@
 package com.example.dao.entities
 
+import com.example.dao.tables.TeamsUsers
 import com.example.dao.tables.Users
 import org.jetbrains.exposed.dao.IntEntity
 import org.jetbrains.exposed.dao.IntEntityClass
@@ -13,6 +14,7 @@ class User(id: EntityID<Int>) : IntEntity(id) {
     var email by Users.email
     var password by Users.password
     var salt by Users.salt
+    var teams by Team via TeamsUsers
 }
 
 val User.fullname

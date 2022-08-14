@@ -28,6 +28,7 @@ fun Application.configureRouting() {
             createRequest()
             getTeams()
             createTeam()
+            addUserToTeam()
             getUsers()
             getHackathons()
             createHackathon()

@@ -17,3 +17,10 @@ fun Route.createTeam() {
         controller.createTeam()
     }
 }
+
+fun Route.addUserToTeam() {
+    post("/api/addUserToTeam") {
+        val controller = TeamsController(call)
+        controller.addUserToTeam()
+    }
+}
