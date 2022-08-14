@@ -62,13 +62,11 @@ class ChatsController(private val call: ApplicationCall) {
             return
         }
 
-        val createdChat = chatsDataSource.createP2PChat(userId.toInt(), chatData)
-        if (createdChat == null) {
-            call.respond(HttpStatusCode.BadRequest, "Sender or companion are not found")
-            return
+        when (val dbResult = chatsDataSource.createP2PChat(userId.toInt(), chatData)) {
+            is DbResult.NotFound -> call.respond(HttpStatusCode.NotFound, "Sender or companion are not found")
+            is DbResult.Conflict -> call.respond(HttpStatusCode.Conflict, Constants.P2P_CHAT_EXISTS)
+            is DbResult.Success ->  call.respond(HttpStatusCode.OK, dbResult.data)
         }
-
-        call.respond(HttpStatusCode.OK, createdChat)
     }
 
     suspend fun createTeamChat() {

@@ -16,9 +16,7 @@ import com.example.data.requests.ChatPagingRequestDto
 import com.example.data.requests.PagingRequestDto
 import com.example.primitives.ChatType
 import com.example.utils.DbResult
-import org.jetbrains.exposed.sql.SizedCollection
-import org.jetbrains.exposed.sql.deleteWhere
-import org.jetbrains.exposed.sql.select
+import org.jetbrains.exposed.sql.*
 import java.time.LocalDateTime
 import java.util.*
 
@@ -43,19 +41,30 @@ class ChatsDataSourceImpl: ChatsDataSource {
         }
     }
 
-    override suspend fun createP2PChat(userId: Int, data: CreateP2PChatDto): ChatDto? = dbQuery {
-            //TODO check that P2P chat already exist
-//        ChatsUsers.select { ChatsUsers.user eq userId }
+    override suspend fun createP2PChat(userId: Int, data: CreateP2PChatDto): DbResult<ChatDto> = dbQuery {
+        val initiator = User.findById(data.initiatorId) ?: return@dbQuery DbResult.NotFound
+        val companion = User.findById(data.companionId) ?: return@dbQuery DbResult.NotFound
 
-            val initiator = User.findById(data.initiatorId) ?: return@dbQuery null
-            val companion = User.findById(data.companionId) ?: return@dbQuery null
+        val p2pChat = Chat.wrapRows(ChatsUsers.innerJoin(Chats)
+            .select { Chats.type eq ChatType.P2P and
+                    (ChatsUsers.user eq initiator.id) or
+                    (ChatsUsers.user eq companion.id)
+            })
+            .distinct()
+            .firstOrNull()
 
+        p2pChat?.let {
+            return@dbQuery DbResult.Conflict
+        }
+
+        DbResult.Success(
             Chat.new {
                 participants = SizedCollection(listOf(initiator, companion))
                 type = ChatType.P2P
                 created = LocalDateTime.now(_utcTimeZone)
             }.toChatDto(userId)
-        }
+        )
+    }
 
     override suspend fun createTeamChat(userId: Int, data: CreateTeamChatDto): DbResult<ChatDto> = dbQuery {
         val dbTeam = Team.findById(data.teamId) ?: return@dbQuery DbResult.NotFound

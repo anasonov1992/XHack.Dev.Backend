@@ -12,6 +12,7 @@ object Constants {
     const val INVALID_REQUEST = "Invalid request"
     const val TEAM_NOT_FOUND = "Team is not found or empty"
     const val CHAT_NOT_FOUND = "Chat is not found"
+    const val P2P_CHAT_EXISTS = "P2P chat already exists"
     const val TEAM_CHAT_EXISTS = "Team chat already exists"
 
     //Texts
