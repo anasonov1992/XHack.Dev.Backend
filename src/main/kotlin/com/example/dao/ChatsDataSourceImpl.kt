@@ -84,17 +84,19 @@ class ChatsDataSourceImpl: ChatsDataSource {
         )
     }
 
-    override suspend fun createMessage(data: SendMessageDto): ChatMessageDto? = dbQuery {
-        val dbChat = Chat.findById(data.chatId) ?: return@dbQuery null
-        val dbSender = User.findById(data.senderId) ?: return@dbQuery null
+    override suspend fun createMessage(data: SendMessageDto): DbResult<ChatMessageDto> = dbQuery {
+        val dbChat = Chat.findById(data.chatId) ?: return@dbQuery DbResult.NotFound
+        val dbSender = User.findById(data.senderId) ?: return@dbQuery DbResult.NotFound
 
-        ChatMessage.new {
-            chat = dbChat
-            sender = dbSender
-            guid = UUID.randomUUID()
-            text = data.text
-            created = LocalDateTime.now(_utcTimeZone)
-        }.toChatMessageDto()
+        DbResult.Success(
+            ChatMessage.new {
+                chat = dbChat
+                sender = dbSender
+                guid = UUID.randomUUID()
+                text = data.text
+                created = LocalDateTime.now(_utcTimeZone)
+            }.toChatMessageDto()
+        )
     }
 
     override suspend fun deleteChat(chatId: Int) = dbQuery {

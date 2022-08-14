@@ -14,6 +14,7 @@ object Constants {
     const val CHAT_NOT_FOUND = "Chat is not found"
     const val P2P_CHAT_EXISTS = "P2P chat already exists"
     const val TEAM_CHAT_EXISTS = "Team chat already exists"
+    const val CHAT_OR_SENDER_NOT_FOUND = "Chat or sender are not found"
 
     //Texts
     const val UNKNOWN_TEXT: String = "Unknown"

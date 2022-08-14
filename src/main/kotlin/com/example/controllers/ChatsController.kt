@@ -100,13 +100,11 @@ class ChatsController(private val call: ApplicationCall) {
             return
         }
 
-        val sentMessage = chatsDataSource.createMessage(messageData)
-        if (sentMessage == null) {
-            call.respond(HttpStatusCode.BadRequest, "Chat or sender are not found")
-            return
+        when (val dbResult = chatsDataSource.createMessage(messageData)) {
+            is DbResult.NotFound -> call.respond(HttpStatusCode.NotFound, Constants.CHAT_OR_SENDER_NOT_FOUND)
+            is DbResult.Conflict -> call.respond(HttpStatusCode.Conflict)
+            is DbResult.Success ->  call.respond(HttpStatusCode.OK, dbResult.data)
         }
-
-        call.respond(HttpStatusCode.OK, sentMessage)
     }
 
     suspend fun deleteChat() {

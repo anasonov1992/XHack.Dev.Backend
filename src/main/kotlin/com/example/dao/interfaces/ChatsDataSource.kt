@@ -10,6 +10,6 @@ interface ChatsDataSource {
     suspend fun getChatMessages(request: ChatPagingRequestDto): List<ChatMessageDto>
     suspend fun createP2PChat(userId: Int, data: CreateP2PChatDto): DbResult<ChatDto>
     suspend fun createTeamChat(userId: Int, data: CreateTeamChatDto): DbResult<ChatDto>
-    suspend fun createMessage(data: SendMessageDto): ChatMessageDto?
+    suspend fun createMessage(data: SendMessageDto): DbResult<ChatMessageDto>
     suspend fun deleteChat(chatId: Int): Unit?
 }

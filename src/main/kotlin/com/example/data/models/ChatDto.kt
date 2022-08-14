@@ -1,6 +1,7 @@
 package com.example.data.models
 
 import com.example.primitives.ChatType
+import kotlinx.serialization.Contextual
 
 @kotlinx.serialization.Serializable
 data class ChatDto(
@@ -10,4 +11,6 @@ data class ChatDto(
     val team: TeamDto?,
     val type: ChatType,
     val lastMessage: ChatMessageDto?
+//    @Contextual //FIXME
+//    val created: java.time.LocalDateTime
 )

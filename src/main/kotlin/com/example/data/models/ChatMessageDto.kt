@@ -10,7 +10,7 @@ data class ChatMessageDto(
     @Serializable(with = UUIDSerializer::class)
     val guid: UUID,
     val text: String,
-    @Contextual
-    val created: java.time.LocalDateTime,
     val sender: UserDto
+//    @Contextual //FIXME
+//    val created: java.time.LocalDateTime,
 )

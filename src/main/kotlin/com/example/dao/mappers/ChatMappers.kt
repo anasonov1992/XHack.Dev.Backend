@@ -23,7 +23,9 @@ fun Chat.toChatDto(userId: Int): ChatDto {
         participants.map { it.toUserDto() },
         chatTeam?.toTeamDto(),
         type,
-        messages.lastOrNull()?.toChatMessageDto())
+        messages.lastOrNull()?.toChatMessageDto()
+//        created //FIXME
+    )
 }
 
-fun ChatMessage.toChatMessageDto(): ChatMessageDto = ChatMessageDto(guid, text, created, sender.toUserDto())
+fun ChatMessage.toChatMessageDto(): ChatMessageDto = ChatMessageDto(guid, text, sender.toUserDto()) //FIXME created
