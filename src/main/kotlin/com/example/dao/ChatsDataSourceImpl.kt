@@ -11,11 +11,11 @@ import com.example.dao.mappers.toChatMessageDto
 import com.example.dao.tables.ChatMessages
 import com.example.dao.tables.Chats
 import com.example.dao.tables.ChatsUsers
-import com.example.dao.tables.Users
 import com.example.data.models.*
 import com.example.data.requests.ChatPagingRequestDto
 import com.example.data.requests.PagingRequestDto
 import com.example.primitives.ChatType
+import com.example.utils.DbResult
 import org.jetbrains.exposed.sql.SizedCollection
 import org.jetbrains.exposed.sql.deleteWhere
 import org.jetbrains.exposed.sql.select
@@ -44,43 +44,44 @@ class ChatsDataSourceImpl: ChatsDataSource {
     }
 
     override suspend fun createP2PChat(userId: Int, data: CreateP2PChatDto): ChatDto? = dbQuery {
-        //TODO check that P2P chat already exist
+            //TODO check that P2P chat already exist
 //        ChatsUsers.select { ChatsUsers.user eq userId }
 
-        val initiator = User.findById(data.initiatorId)
-        val companion = User.findById(data.companionId)
-        if (initiator == null || companion == null)
-            null
+            val initiator = User.findById(data.initiatorId) ?: return@dbQuery null
+            val companion = User.findById(data.companionId) ?: return@dbQuery null
 
-        Chat.new {
-            participants = SizedCollection(listOf(initiator!!, companion!!))
-            type = ChatType.P2P
-            created = LocalDateTime.now(_utcTimeZone)
-        }.toChatDto(userId)
-    }
+            Chat.new {
+                participants = SizedCollection(listOf(initiator, companion))
+                type = ChatType.P2P
+                created = LocalDateTime.now(_utcTimeZone)
+            }.toChatDto(userId)
+        }
 
-    override suspend fun createTeamChat(userId: Int, data: CreateTeamChatDto): ChatDto? = dbQuery {
-        var dbTeam = Team.findById(data.teamId)
-        if (dbTeam == null || !dbTeam.users.any())
-            null
+    override suspend fun createTeamChat(userId: Int, data: CreateTeamChatDto): DbResult<ChatDto> = dbQuery {
+        val dbTeam = Team.findById(data.teamId) ?: return@dbQuery DbResult.NotFound
+        if (!dbTeam.users.any())
+            return@dbQuery DbResult.NotFound
 
-        Chat.new {
-            team = dbTeam!!
-            participants = dbTeam.users
-            type = ChatType.Team
-            created = LocalDateTime.now(_utcTimeZone)
-        }.toChatDto(userId)
+        if (Chat.find { Chats.team eq dbTeam.id }.any())
+            return@dbQuery DbResult.Conflict
+
+        DbResult.Success(
+            Chat.new {
+                team = dbTeam
+                participants = dbTeam.users
+                type = ChatType.Team
+                created = LocalDateTime.now(_utcTimeZone)
+            }.toChatDto(userId)
+        )
     }
 
     override suspend fun createMessage(data: SendMessageDto): ChatMessageDto? = dbQuery {
-        val dbChat = Chat.findById(data.chatId)
-        val dbSender = User.findById(data.senderId)
-        if (dbChat == null || dbSender == null)
-            null
+        val dbChat = Chat.findById(data.chatId) ?: return@dbQuery null
+        val dbSender = User.findById(data.senderId) ?: return@dbQuery null
 
         ChatMessage.new {
-            chat = dbChat!!
-            sender = dbSender!!
+            chat = dbChat
+            sender = dbSender
             guid = UUID.randomUUID()
             text = data.text
             created = LocalDateTime.now(_utcTimeZone)
@@ -88,12 +89,10 @@ class ChatsDataSourceImpl: ChatsDataSource {
     }
 
     override suspend fun deleteChat(chatId: Int) = dbQuery {
-        val chat = Chat.findById(chatId)
-        if (chat == null)
-            null
+        val chat = Chat.findById(chatId) ?: return@dbQuery null
 
         ChatsUsers.deleteWhere { ChatsUsers.chat eq chatId }
         ChatMessages.deleteWhere { ChatMessages.chat eq chatId }
-        chat?.delete()
+        chat.delete()
     }
 }

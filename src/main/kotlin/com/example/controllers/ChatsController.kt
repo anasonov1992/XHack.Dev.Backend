@@ -8,6 +8,7 @@ import com.example.data.models.SendMessageDto
 import com.example.data.requests.ChatPagingRequestDto
 import com.example.data.requests.PagingRequestDto
 import com.example.utils.Constants
+import com.example.utils.DbResult
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
@@ -82,13 +83,11 @@ class ChatsController(private val call: ApplicationCall) {
             return
         }
 
-        val createdChat = chatsDataSource.createTeamChat(userId.toInt(), chatData)
-        if (createdChat == null) {
-            call.respond(HttpStatusCode.BadRequest, Constants.TEAM_NOT_FOUND)
-            return
+        when (val dbResult = chatsDataSource.createTeamChat(userId.toInt(), chatData)) {
+            is DbResult.NotFound -> call.respond(HttpStatusCode.NotFound, Constants.TEAM_NOT_FOUND)
+            is DbResult.Conflict -> call.respond(HttpStatusCode.Conflict, Constants.TEAM_CHAT_EXISTS)
+            is DbResult.Success ->  call.respond(HttpStatusCode.OK, dbResult.data)
         }
-
-        call.respond(HttpStatusCode.OK, createdChat)
     }
 
     suspend fun sendMessage() {
