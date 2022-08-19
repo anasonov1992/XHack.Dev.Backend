@@ -27,7 +27,7 @@ class ChatsDataSourceImpl: ChatsDataSource {
         request.run {
             Chat.wrapRows(ChatsUsers.innerJoin(Chats)
                 .select { ChatsUsers.user eq userId })
-                .limit(pageSize, pageSize * pageNumber)
+                .limit(pageSize, pageSize * (pageNumber - 1))
                 .map { it.toChatDto(userId) }
         }
     }
