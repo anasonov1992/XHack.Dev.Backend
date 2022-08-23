@@ -7,13 +7,16 @@ import com.example.dao.interfaces.TeamsDataSource
 import com.example.dao.mappers.toTeamDto
 import com.example.data.models.AddUserToTeamDto
 import com.example.data.models.TeamDto
+import com.example.data.requests.PagingRequestDto
 import com.example.utils.MocksGenerator
 import org.jetbrains.exposed.sql.SizedCollection
 
 class TeamsDataSourceImpl : TeamsDataSource {
-    override suspend fun getTeams(userId: Int): List<TeamDto> = dbQuery {
+    override suspend fun getTeams(userId: Int, request: PagingRequestDto): List<TeamDto> = dbQuery {
         //FIXME find { Teams.userId eq userId }.toList()
-        Team.all().map { it.toTeamDto() }.toList()
+        request.run {
+            Team.all().limit(pageSize, pageSize * (pageNumber - 1)).map { it.toTeamDto() }.toList()
+        }
     }
 
     override suspend fun createTeam(team: TeamDto): TeamDto = dbQuery {

@@ -7,5 +7,5 @@ data class TeamDto(
     val description: String,
     val avatarUrl: String?,
     val maxUsersCount: Int,
-    val users: List<UserDto>
+    val users: List<UserDto> = emptyList()
  )

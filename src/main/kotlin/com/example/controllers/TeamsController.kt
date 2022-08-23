@@ -3,6 +3,7 @@ package com.example.controllers
 import com.example.dao.interfaces.TeamsDataSource
 import com.example.data.models.AddUserToTeamDto
 import com.example.data.models.TeamDto
+import com.example.data.requests.PagingRequestDto
 import com.example.utils.Constants
 import io.ktor.http.*
 import io.ktor.server.application.*
@@ -22,7 +23,12 @@ class TeamsController(private val call: ApplicationCall) {
             return
         }
 
-        call.respond(HttpStatusCode.OK, teamsDataSource.getTeams(userId.toInt()))
+        val request = call.receiveOrNull<PagingRequestDto>() ?: run {
+            call.respond(HttpStatusCode.BadRequest, Constants.INVALID_REQUEST)
+            return
+        }
+
+        call.respond(HttpStatusCode.OK, teamsDataSource.getTeams(userId.toInt(), request))
     }
 
     suspend fun createTeam() {

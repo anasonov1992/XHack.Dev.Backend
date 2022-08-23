@@ -5,7 +5,7 @@ import io.ktor.server.application.*
 import io.ktor.server.routing.*
 
 fun Route.getTeams() {
-    get("/api/getTeams") {
+    post("/api/getTeams") {
         val controller = TeamsController(call)
         controller.getTeams()
     }
