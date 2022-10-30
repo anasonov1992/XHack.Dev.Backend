@@ -1,6 +1,8 @@
 package com.example.dao
 
 import com.example.dao.tables.*
+import com.example.dao.tables.blackcards.Cards
+import com.example.dao.tables.blackcards.Fractions
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
 import kotlinx.coroutines.Dispatchers
@@ -41,7 +43,10 @@ object DatabaseFactory {
                 Chats,
                 ChatMessages,
                 ChatsUsers,
-                TeamsUsers
+                TeamsUsers,
+                // Black Cards
+                Fractions,
+                Cards
             )
         }
     }
