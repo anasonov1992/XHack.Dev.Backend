@@ -2,8 +2,10 @@ package com.example.controllers.blackcards
 
 import com.example.dao.interfaces.blackcards.CardsDataSource
 import com.example.data.models.blackcards.CardArtDto
+import com.example.data.models.blackcards.CreateCardArtDto
 import com.example.data.requests.PagingRequestDto
 import com.example.utils.Constants
+import com.example.utils.DbResult
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
@@ -37,12 +39,16 @@ class CardsController(private val call: ApplicationCall) {
             return
         }
 
-        val cardArt = call.receiveOrNull<CardArtDto>() ?: run {
+        val cardArt = call.receiveOrNull<CreateCardArtDto>() ?: run {
             call.respond(HttpStatusCode.BadRequest)
             return
         }
 
-        call.respond(HttpStatusCode.OK, cardsDataSource.createCardArt(cardArt))
+        when (val dbResult = cardsDataSource.createCardArt(cardArt)) {
+            is DbResult.NotFound -> call.respond(HttpStatusCode.NotFound, "Fraction is not found")
+            is DbResult.Conflict -> call.respond(HttpStatusCode.Conflict, "Conflict error")
+            is DbResult.Success ->  call.respond(HttpStatusCode.OK, dbResult.data)
+        }
     }
 }
 
