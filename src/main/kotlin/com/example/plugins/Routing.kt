@@ -3,10 +3,7 @@ package com.example.plugins
 import com.example.routes.*
 import com.example.routes.auth.login
 import com.example.routes.auth.register
-import com.example.routes.blackcards.createCardArt
-import com.example.routes.blackcards.createFraction
-import com.example.routes.blackcards.getCardArts
-import com.example.routes.blackcards.getFractions
+import com.example.routes.blackcards.*
 import com.example.routes.files.upload
 import com.example.utils.configureToken
 import io.ktor.server.application.*
@@ -53,6 +50,7 @@ fun Application.configureRouting() {
             getFractions()
             createFraction()
             getCardArts()
+            getCardArtDetail()
             createCardArt()
         }
 

@@ -11,6 +11,13 @@ fun Route.getCardArts() {
     }
 }
 
+fun Route.getCardArtDetail() {
+    post("/api/getCardArtDetail") {
+        val controller = CardsController(call)
+        controller.getCardArtDetail()
+    }
+}
+
 fun Route.createCardArt() {
     post("/api/createCardArt") {
         val controller = CardsController(call)
