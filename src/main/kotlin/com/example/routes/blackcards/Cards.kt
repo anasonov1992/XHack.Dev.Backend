@@ -12,7 +12,7 @@ fun Route.getCardArts() {
 }
 
 fun Route.getCardArtDetail() {
-    post("/api/getCardArtDetail") {
+    get("/api/getCardArtDetail") {
         val controller = CardsController(call)
         controller.getCardArtDetail()
     }
