@@ -78,7 +78,7 @@ class CardsController(private val call: ApplicationCall) {
             return
         }
 
-        val cardArt = call.receiveOrNull<CardArtDetailDto>() ?: run {
+        val cardArt = call.receiveOrNull<CreateCardArtDto>() ?: run {
             call.respond(HttpStatusCode.BadRequest)
             return
         }

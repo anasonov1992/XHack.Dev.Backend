@@ -10,6 +10,8 @@ class Card(id: EntityID<Int>) : IntEntity(id) {
 
     var name by Cards.name
     var description by Cards.description
-    var artUrl by Cards.artUrl
+    var artUrlOriginal by Cards.artUrlOriginal
+    var artUrlDetail by Cards.artUrlDetail
+    var artUrlList by Cards.artUrlList
     var fraction by Fraction referencedOn Cards.fraction
 }

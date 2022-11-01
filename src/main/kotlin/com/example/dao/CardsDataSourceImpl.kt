@@ -36,20 +36,24 @@ class CardsDataSourceImpl : CardsDataSource {
             Card.new {
                 name = cardArt.name
                 description = cardArt.description
-                artUrl = cardArt.artUrl
+                artUrlOriginal = cardArt.artUrlOriginal
+                artUrlDetail = cardArt.artUrlDetail
+                artUrlList = cardArt.artUrlList
                 fraction = dbFraction
             }.toCardArtDto()
         )
     }
 
-    override suspend fun updateCardArt(cardArt: CardArtDetailDto): DbResult<CardArtDetailDto> = dbQuery {
+    override suspend fun updateCardArt(cardArt: CreateCardArtDto): DbResult<CardArtDetailDto> = dbQuery {
         val dbCardArt = Card.findById(cardArt.id) ?: return@dbQuery DbResult.NotFound
 
         DbResult.Success(
             dbCardArt.apply {
                 name = cardArt.name
                 description = cardArt.description
-                artUrl = cardArt.artUrl
+                artUrlOriginal = cardArt.artUrlOriginal
+                artUrlDetail = cardArt.artUrlDetail
+                artUrlList = cardArt.artUrlList
             }.toCardArtDetailDto()
         )
     }

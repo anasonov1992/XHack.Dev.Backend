@@ -5,9 +5,9 @@ import com.example.data.models.blackcards.CardArtDetailDto
 import com.example.data.models.blackcards.CardArtDto
 
 fun Card.toCardArtDto(): CardArtDto {
-    return CardArtDto(id.value, name, artUrl, fraction.name)
+    return CardArtDto(id.value, name, artUrlList, fraction.name)
 }
 
 fun Card.toCardArtDetailDto(): CardArtDetailDto {
-    return CardArtDetailDto(id.value, name, description, artUrl, fraction.name)
+    return CardArtDetailDto(id.value, name, description, artUrlDetail, fraction.name)
 }
