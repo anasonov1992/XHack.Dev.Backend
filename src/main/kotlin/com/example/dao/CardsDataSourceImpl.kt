@@ -20,7 +20,6 @@ class CardsDataSourceImpl : CardsDataSource {
     override suspend fun getCardArts(request: PagingRequestDto): List<CardArtDto> = dbQuery {
         request.run {
             Card.wrapRows(Fractions.innerJoin(Cards).selectAll())
-                .orderBy(Cards.id to SortOrder.ASC)
                 .limit(pageSize, pageSize * pageNumber)
                 .map { it.toCardArtDto() }
         }
