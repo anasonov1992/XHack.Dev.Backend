@@ -10,4 +10,5 @@ interface CardsDataSource {
     suspend fun getCardArts(request: PagingRequestDto): List<CardArtDto>
     suspend fun getCardArtDetail(id: Int): DbResult<CardArtDetailDto>
     suspend fun createCardArt(cardArt: CreateCardArtDto): DbResult<CardArtDto>
+    suspend fun updateCardArt(cardArt: CardArtDetailDto): DbResult<CardArtDetailDto>
 }

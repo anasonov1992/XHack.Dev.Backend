@@ -52,6 +52,7 @@ fun Application.configureRouting() {
             getCardArts()
             getCardArtDetail()
             createCardArt()
+            updateCardArt()
         }
 
         static {

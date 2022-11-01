@@ -24,3 +24,10 @@ fun Route.createCardArt() {
         controller.createCardArt()
     }
 }
+
+fun Route.updateCardArt() {
+    post("/api/updateCardArt") {
+        val controller = CardsController(call)
+        controller.updateCardArt()
+    }
+}

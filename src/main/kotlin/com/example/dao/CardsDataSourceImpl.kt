@@ -41,4 +41,16 @@ class CardsDataSourceImpl : CardsDataSource {
             }.toCardArtDto()
         )
     }
+
+    override suspend fun updateCardArt(cardArt: CardArtDetailDto): DbResult<CardArtDetailDto> = dbQuery {
+        val dbCardArt = Card.findById(cardArt.id) ?: return@dbQuery DbResult.NotFound
+
+        DbResult.Success(
+            dbCardArt.apply {
+                name = cardArt.name
+                description = cardArt.description
+                artUrl = cardArt.artUrl
+            }.toCardArtDetailDto()
+        )
+    }
 }
