@@ -4,7 +4,7 @@ import com.example.routes.*
 import com.example.routes.auth.login
 import com.example.routes.auth.register
 import com.example.routes.blackcards.*
-import com.example.routes.files.upload
+import com.example.routes.upload
 import com.example.utils.configureToken
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
@@ -44,7 +44,10 @@ fun Application.configureRouting() {
             createTeamChat()
             sendMessage()
             deleteChat()
-            upload(tokenConfig)
+
+            // Files
+            upload()
+            addFile()
 
             // Black Cards
             getFractions()

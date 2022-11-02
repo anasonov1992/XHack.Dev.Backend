@@ -14,4 +14,5 @@ val dbModule = module {
     single<ChatsDataSource> { ChatsDataSourceImpl() }
     single<CardsDataSource> { CardsDataSourceImpl() }
     single<FractionsDataSource> { FractionsDataSourceImpl() }
+    single<FilesDataSource> { FilesDataSourceImpl() }
 }

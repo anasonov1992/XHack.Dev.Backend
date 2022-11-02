@@ -2,6 +2,7 @@ package com.example.dao
 
 import com.example.dao.tables.*
 import com.example.dao.tables.blackcards.Cards
+import com.example.dao.tables.blackcards.Files
 import com.example.dao.tables.blackcards.Fractions
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
@@ -46,7 +47,8 @@ object DatabaseFactory {
                 TeamsUsers,
                 // Black Cards
                 Fractions,
-                Cards
+                Cards,
+                Files
             )
         }
     }
