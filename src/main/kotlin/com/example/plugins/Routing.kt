@@ -47,6 +47,7 @@ fun Application.configureRouting() {
 
             // Files
             upload()
+            download()
             addFile()
 
             // Black Cards

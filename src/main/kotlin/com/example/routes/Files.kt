@@ -13,7 +13,7 @@ fun Route.upload() {
 }
 
 fun Route.download() {
-    get("/download/{guid}") {
+    get("/api/download/{guid}") {
         val controller = FilesController(call)
         controller.download()
     }
