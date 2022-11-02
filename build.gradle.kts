@@ -35,6 +35,7 @@ dependencies {
     implementation("io.ktor:ktor-client-apache-jvm:$ktor_version")
     implementation("io.ktor:ktor-server-auth-jwt-jvm:$ktor_version")
     implementation("io.ktor:ktor-server-netty-jvm:$ktor_version")
+    implementation("io.ktor:ktor-server-partial-content:$ktor_version")
 
     implementation("org.postgresql:postgresql:42.3.6")
     implementation("com.zaxxer:HikariCP:5.0.1")
