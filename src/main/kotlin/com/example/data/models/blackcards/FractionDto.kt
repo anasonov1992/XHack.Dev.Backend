@@ -5,6 +5,5 @@ data class FractionDto(
     val id: Int,
     val name: String,
     val description: String,
-    val artUrl: String? = null,
-    val cardArts: List<CardArtDto> = emptyList()
+    val artUrl: String? = null
 )

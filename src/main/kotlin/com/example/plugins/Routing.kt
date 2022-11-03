@@ -53,6 +53,7 @@ fun Application.configureRouting() {
             // Black Cards
             getFractions()
             createFraction()
+            updateFraction()
             getCardArts()
             getCardArtDetail()
             createCardArt()

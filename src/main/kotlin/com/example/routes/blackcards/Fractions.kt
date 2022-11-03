@@ -17,3 +17,10 @@ fun Route.createFraction() {
         controller.createFraction()
     }
 }
+
+fun Route.updateFraction() {
+    post("/api/updateFraction") {
+        val controller = FractionsController(call)
+        controller.updateFraction()
+    }
+}
