@@ -11,17 +11,20 @@ import com.example.dao.tables.blackcards.Fractions
 import com.example.data.models.blackcards.CardArtDetailDto
 import com.example.data.models.blackcards.CardArtDto
 import com.example.data.models.blackcards.CreateCardArtDto
-import com.example.data.requests.PagingRequestDto
+import com.example.data.requests.blackcards.SearchPagingRequestDto
 import com.example.utils.DbResult
-import org.jetbrains.exposed.sql.SortOrder
-import org.jetbrains.exposed.sql.selectAll
+import org.jetbrains.exposed.sql.*
 
 class CardsDataSourceImpl : CardsDataSource {
-    override suspend fun getCardArts(request: PagingRequestDto): List<CardArtDto> = dbQuery {
-        request.run {
+    override suspend fun getCardArts(request: SearchPagingRequestDto): List<CardArtDto> = dbQuery {
+        val cardsData = if (request.filter != null) {
+            Card.wrapRows(Fractions.innerJoin(Cards).select { (Cards.name eq request.filter) }) //FIXME or (Cards.fraction eq request.filter)
+        } else {
             Card.wrapRows(Fractions.innerJoin(Cards).selectAll())
-                .limit(pageSize, pageSize * pageNumber)
-                .map { it.toCardArtDto() }
+        }
+
+        request.run {
+            cardsData.limit(pageSize, pageSize * pageNumber).map { it.toCardArtDto() }
         }
     }
 

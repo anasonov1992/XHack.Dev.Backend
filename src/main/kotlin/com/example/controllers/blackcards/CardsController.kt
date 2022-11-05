@@ -1,10 +1,8 @@
 package com.example.controllers.blackcards
 
 import com.example.dao.interfaces.blackcards.CardsDataSource
-import com.example.data.models.blackcards.CardArtDetailDto
-import com.example.data.models.blackcards.CardArtDto
 import com.example.data.models.blackcards.CreateCardArtDto
-import com.example.data.requests.PagingRequestDto
+import com.example.data.requests.blackcards.SearchPagingRequestDto
 import com.example.utils.Constants
 import com.example.utils.DbResult
 import io.ktor.http.*
@@ -25,7 +23,7 @@ class CardsController(private val call: ApplicationCall) {
             return
         }
 
-        val request = call.receiveOrNull<PagingRequestDto>() ?: run {
+        val request = call.receiveOrNull<SearchPagingRequestDto>() ?: run {
             call.respond(HttpStatusCode.BadRequest, Constants.INVALID_REQUEST)
             return
         }
