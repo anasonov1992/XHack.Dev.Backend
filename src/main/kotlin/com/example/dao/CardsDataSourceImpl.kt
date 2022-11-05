@@ -18,7 +18,7 @@ import org.jetbrains.exposed.sql.*
 class CardsDataSourceImpl : CardsDataSource {
     override suspend fun getCardArts(request: SearchPagingRequestDto): List<CardArtDto> = dbQuery {
         val cardsData = if (request.filter != null) {
-            Card.wrapRows(Fractions.innerJoin(Cards).select { (Cards.name eq request.filter) }) //FIXME or (Cards.fraction eq request.filter)
+            Card.wrapRows(Fractions.innerJoin(Cards).select { (Cards.name like request.filter) }) //FIXME or (Cards.fraction like request.filter)
         } else {
             Card.wrapRows(Fractions.innerJoin(Cards).selectAll())
         }
