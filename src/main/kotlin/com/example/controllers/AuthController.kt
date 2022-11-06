@@ -1,7 +1,7 @@
 package com.example.controllers
 
 import com.example.dao.interfaces.UsersDataSource
-import com.example.data.models.UserDto
+import com.example.data.models.RegisterUserDto
 import com.example.data.requests.AuthRequestDto
 import com.example.data.requests.RegisterUserRequestDto
 import com.example.data.responses.TokenResponse
@@ -59,8 +59,7 @@ class AuthController(private val call: ApplicationCall) {
             return@register
         }
 
-        val areFieldsBlank = request.firstName.isBlank()
-                || request.lastName.isBlank()
+        val areFieldsBlank = request.username.isBlank()
                 || request.email.isBlank()
                 || request.password.isBlank()
         val isPwTooShort = request.password.length < minPasswordLength
@@ -76,17 +75,14 @@ class AuthController(private val call: ApplicationCall) {
         }
 
         val saltedHash = hashingService.generateHash(request.password)
-        val user = UserDto(
-            firstName = request.firstName,
-            lastName = request.lastName,
-            email = request.email,
-            password = saltedHash.hash,
-            salt = saltedHash.salt
+        val user = userDataSource.registerUser(
+            RegisterUserDto(
+                username = request.username,
+                email = request.email,
+                password = saltedHash.hash,
+                salt = saltedHash.salt
+            )
         )
-        if (userDataSource.createUser(user) == null)  {
-            call.respond(HttpStatusCode.Conflict, "An error happened during account creation.")
-            return
-        }
 
         call.respond(HttpStatusCode.OK, getTokenResponse(tokenConfig, user.id.toString()))
     }

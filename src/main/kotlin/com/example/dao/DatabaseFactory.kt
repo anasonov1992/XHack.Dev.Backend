@@ -1,9 +1,7 @@
 package com.example.dao
 
 import com.example.dao.tables.*
-import com.example.dao.tables.blackcards.Cards
-import com.example.dao.tables.blackcards.Files
-import com.example.dao.tables.blackcards.Fractions
+import com.example.dao.tables.blackcards.*
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
 import kotlinx.coroutines.Dispatchers
@@ -33,7 +31,7 @@ object DatabaseFactory {
 
         transaction(database) {
             //FIXME use
-//            SchemaUtils.drop(Cards)
+            SchemaUtils.drop(ChatMessages, ChatsUsers, TeamsUsers, Requests, Users)
             SchemaUtils.create(
                 Users,
                 Teams,
@@ -45,10 +43,14 @@ object DatabaseFactory {
                 ChatMessages,
                 ChatsUsers,
                 TeamsUsers,
+                Files,
+
                 // Black Cards
                 Fractions,
                 Cards,
-                Files
+                Ranks,
+                UnitClasses,
+                CardUnits
             )
         }
     }
