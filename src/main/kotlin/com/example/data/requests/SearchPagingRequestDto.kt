@@ -1,4 +1,4 @@
-package com.example.data.requests.blackcards
+package com.example.data.requests
 
 import kotlinx.serialization.Serializable
 

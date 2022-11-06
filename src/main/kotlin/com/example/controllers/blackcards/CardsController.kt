@@ -2,7 +2,7 @@ package com.example.controllers.blackcards
 
 import com.example.dao.interfaces.blackcards.CardsDataSource
 import com.example.data.models.blackcards.CreateCardArtDto
-import com.example.data.requests.blackcards.SearchPagingRequestDto
+import com.example.data.requests.SearchPagingRequestDto
 import com.example.utils.Constants
 import com.example.utils.DbResult
 import io.ktor.http.*

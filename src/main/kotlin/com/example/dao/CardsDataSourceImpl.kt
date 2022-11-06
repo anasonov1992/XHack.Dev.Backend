@@ -1,30 +1,31 @@
 package com.example.dao
 
 import com.example.dao.DatabaseFactory.dbQuery
-import com.example.dao.entities.blackcards.Card
-import com.example.dao.entities.blackcards.Fraction
+import com.example.dao.entities.blackcards.*
 import com.example.dao.interfaces.blackcards.CardsDataSource
-import com.example.dao.mappers.blackcards.toCardArtDetailDto
-import com.example.dao.mappers.blackcards.toCardArtDto
+import com.example.dao.mappers.blackcards.*
+import com.example.dao.tables.blackcards.CardUnits
 import com.example.dao.tables.blackcards.Cards
 import com.example.dao.tables.blackcards.Fractions
-import com.example.data.models.blackcards.CardArtDetailDto
-import com.example.data.models.blackcards.CardArtDto
-import com.example.data.models.blackcards.CreateCardArtDto
-import com.example.data.requests.blackcards.SearchPagingRequestDto
+import com.example.dao.tables.blackcards.UnitClasses
+import com.example.data.models.blackcards.*
+import com.example.data.requests.SearchPagingRequestDto
+import com.example.data.requests.blackcards.CardsPagingRequestDto
 import com.example.utils.DbResult
 import org.jetbrains.exposed.sql.*
 
 class CardsDataSourceImpl : CardsDataSource {
     override suspend fun getCardArts(request: SearchPagingRequestDto): List<CardArtDto> = dbQuery {
-        val cardsData = if (request.filter != null) {
-            Card.wrapRows(Fractions.innerJoin(Cards).select { (Cards.name like "%${request.filter}%") }) //FIXME or (Cards.fraction like request.filter)
-        } else {
-            Card.wrapRows(Fractions.innerJoin(Cards).selectAll())
+        val query = Fractions.innerJoin(Cards).selectAll() //
+
+        request.filter?.let {
+            query.andWhere { (Cards.name.lowerCase() like "%${request.filter}%") or (Fractions.name.lowerCase() like "%${request.filter}%") }
         }
 
         request.run {
-            cardsData.limit(pageSize, pageSize * pageNumber).map { it.toCardArtDto() }
+            Card.wrapRows(query)
+                .limit(pageSize, pageSize * pageNumber)
+                .map { it.toCardArtDto() }
         }
     }
 
