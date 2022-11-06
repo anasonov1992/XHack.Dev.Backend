@@ -1,9 +1,8 @@
 package com.example.dao.interfaces.blackcards
 
-import com.example.data.models.blackcards.CardArtDetailDto
-import com.example.data.models.blackcards.CardArtDto
-import com.example.data.models.blackcards.CreateCardArtDto
-import com.example.data.requests.blackcards.SearchPagingRequestDto
+import com.example.data.models.blackcards.*
+import com.example.data.requests.SearchPagingRequestDto
+import com.example.data.requests.blackcards.CardsPagingRequestDto
 import com.example.utils.DbResult
 
 interface CardsDataSource {
@@ -11,4 +10,10 @@ interface CardsDataSource {
     suspend fun getCardArtDetail(id: Int): DbResult<CardArtDetailDto>
     suspend fun createCardArt(cardArt: CreateCardArtDto): DbResult<CardArtDto>
     suspend fun updateCardArt(cardArt: CreateCardArtDto): DbResult<CardArtDetailDto>
+    suspend fun getRanks(): List<RankDto>
+    suspend fun createRank(rank: RankDto): DbResult<RankDto>
+    suspend fun getUnitClasses(): List<UnitClassDto>
+    suspend fun createUnitClass(unitClass: UnitClassDto): DbResult<UnitClassDto>
+    suspend fun getCardUnits(request: CardsPagingRequestDto): List<CardUnitDto>
+    suspend fun createCardUnit(card: CardUnitDto): DbResult<CardUnitDto>
 }
