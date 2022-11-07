@@ -58,6 +58,13 @@ fun Application.configureRouting() {
             getCardArtDetail()
             createCardArt()
             updateCardArt()
+
+            getRanks()
+            createRank()
+            getUnitClasses()
+            createUnitClass()
+            getCardUnits()
+            createCardUnit()
         }
 
         static {
