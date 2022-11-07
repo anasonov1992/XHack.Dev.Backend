@@ -98,6 +98,7 @@ class CardsDataSourceImpl : CardsDataSource {
     }
 
     override suspend fun createCardUnit(cardUnit: CreateCardUnitDto): DbResult<CardUnitDto> = dbQuery {
+        val dbFraction = Fraction.findById(cardUnit.fractionId) ?: return@dbQuery DbResult.NotFound
         val dbRank = Rank.findById(cardUnit.rankId) ?: return@dbQuery DbResult.NotFound
 
         var dbUnitClasses = emptyList<UnitClass>()
@@ -107,6 +108,7 @@ class CardsDataSourceImpl : CardsDataSource {
 
         DbResult.Success(
             CardUnit.new {
+                fraction = dbFraction
                 rank = dbRank
                 name = cardUnit.name
                 isUnique = cardUnit.isUnique

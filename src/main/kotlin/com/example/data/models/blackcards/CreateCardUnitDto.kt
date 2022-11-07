@@ -4,7 +4,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class CreateCardUnitDto(
-    val id: Int,
+    val fractionId: Int,
     val rankId: Int,
     val name: String,
     val isUnique: Boolean,
