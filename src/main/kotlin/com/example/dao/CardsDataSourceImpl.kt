@@ -97,12 +97,12 @@ class CardsDataSourceImpl : CardsDataSource {
         }
     }
 
-    override suspend fun createCardUnit(card: CardUnitDto): DbResult<CardUnitDto> = dbQuery {
-        val dbRank = Rank.findById(card.rank.id) ?: return@dbQuery DbResult.NotFound
+    override suspend fun createCardUnit(card: CreateCardUnitDto): DbResult<CardUnitDto> = dbQuery {
+        val dbRank = Rank.findById(card.rankId) ?: return@dbQuery DbResult.NotFound
 
         var dbUnitClasses = emptyList<UnitClass>()
-        if (card.classes.isNotEmpty()) {
-            dbUnitClasses = UnitClass.find { UnitClasses.id inList card.classes.map { it.id } }.toList()
+        if (card.classIds.isNotEmpty()) {
+            dbUnitClasses = UnitClass.find { UnitClasses.id inList card.classIds }.toList()
         }
 
         DbResult.Success(

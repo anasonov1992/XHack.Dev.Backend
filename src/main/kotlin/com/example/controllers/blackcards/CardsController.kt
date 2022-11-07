@@ -3,6 +3,7 @@ package com.example.controllers.blackcards
 import com.example.dao.interfaces.blackcards.CardsDataSource
 import com.example.data.models.blackcards.CardUnitDto
 import com.example.data.models.blackcards.CreateCardArtDto
+import com.example.data.models.blackcards.CreateCardUnitDto
 import com.example.data.requests.SearchPagingRequestDto
 import com.example.data.requests.blackcards.CardsPagingRequestDto
 import com.example.utils.Constants
@@ -112,7 +113,7 @@ class CardsController(private val call: ApplicationCall) {
             return
         }
 
-        val cardUnit = call.receiveOrNull<CardUnitDto>() ?: run {
+        val cardUnit = call.receiveOrNull<CreateCardUnitDto>() ?: run {
             call.respond(HttpStatusCode.BadRequest)
             return
         }
