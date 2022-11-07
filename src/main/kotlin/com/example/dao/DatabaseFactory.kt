@@ -50,7 +50,8 @@ object DatabaseFactory {
                 Cards,
                 Ranks,
                 UnitClasses,
-                CardUnits
+                CardUnits,
+                CardsUnitClasses
             )
         }
     }
