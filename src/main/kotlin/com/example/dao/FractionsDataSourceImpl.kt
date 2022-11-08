@@ -1,13 +1,9 @@
 package com.example.dao
 
 import com.example.dao.DatabaseFactory.dbQuery
-import com.example.dao.entities.blackcards.Card
 import com.example.dao.entities.blackcards.Fraction
 import com.example.dao.interfaces.blackcards.FractionsDataSource
-import com.example.dao.mappers.blackcards.toCardArtDetailDto
 import com.example.dao.mappers.blackcards.toFractionDto
-import com.example.data.models.blackcards.CardArtDetailDto
-import com.example.data.models.blackcards.CreateCardArtDto
 import com.example.data.models.blackcards.FractionDto
 import com.example.utils.DbResult
 
@@ -18,6 +14,7 @@ class FractionsDataSourceImpl : FractionsDataSource {
 
     override suspend fun createFraction(fraction: FractionDto): FractionDto = dbQuery {
         Fraction.new {
+            type = fraction.type
             name = fraction.name
             description = fraction.description
             artUrl = fraction.artUrl
@@ -29,6 +26,7 @@ class FractionsDataSourceImpl : FractionsDataSource {
 
         DbResult.Success(
             dbFraction.apply {
+                type = fraction.type
                 name = fraction.name
                 description = fraction.description
                 artUrl = fraction.artUrl

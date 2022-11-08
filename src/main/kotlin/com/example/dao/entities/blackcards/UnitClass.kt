@@ -8,6 +8,6 @@ import org.jetbrains.exposed.dao.id.EntityID
 class UnitClass(id: EntityID<Int>) : IntEntity(id) {
     companion object : IntEntityClass<UnitClass>(UnitClasses)
 
-    var displayName by UnitClasses.displayName
     var type by UnitClasses.type
+    var displayName by UnitClasses.displayName
 }

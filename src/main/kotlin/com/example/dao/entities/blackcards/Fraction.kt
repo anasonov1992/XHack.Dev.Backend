@@ -9,6 +9,7 @@ import org.jetbrains.exposed.dao.id.EntityID
 class Fraction(id: EntityID<Int>) : IntEntity(id) {
     companion object : IntEntityClass<Fraction>(Fractions)
 
+    var type by Fractions.type
     var name by Fractions.name
     var description by Fractions.description
     var artUrl by Fractions.artUrl
