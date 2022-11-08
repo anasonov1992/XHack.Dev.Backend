@@ -32,7 +32,7 @@ object DatabaseFactory {
         transaction(database) {
             //FIXME use
 //            SchemaUtils.drop(ChatMessages, ChatsUsers, TeamsUsers, Requests, Users)
-            SchemaUtils.create(
+            SchemaUtils.createMissingTablesAndColumns(
                 Users,
                 Teams,
                 Requests,
@@ -46,14 +46,13 @@ object DatabaseFactory {
                 Files,
 
                 // Black Cards
-//                Fractions,
+                Fractions,
                 Cards,
                 Ranks,
                 UnitClasses,
                 CardUnits,
                 CardsUnitClasses
             )
-            SchemaUtils.createMissingTablesAndColumns(Fractions)
         }
     }
 
