@@ -46,13 +46,14 @@ object DatabaseFactory {
                 Files,
 
                 // Black Cards
-                Fractions,
+//                Fractions,
                 Cards,
                 Ranks,
                 UnitClasses,
                 CardUnits,
                 CardsUnitClasses
             )
+            SchemaUtils.createMissingTablesAndColumns(Fractions)
         }
     }
 
