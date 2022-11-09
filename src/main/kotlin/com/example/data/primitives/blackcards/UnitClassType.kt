@@ -4,5 +4,10 @@ enum class UnitClassType {
     Man,
     Pleb,
     Craftsman,
+    Spy,
+    Gangster,
+    Beast,
+    Gremlin,
+    Soldier,
     Knight
 }
