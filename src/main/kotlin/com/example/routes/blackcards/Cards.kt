@@ -48,6 +48,13 @@ fun Route.createCardUnit() {
     }
 }
 
+fun Route.updateCardUnit() {
+    post("/api/updateCardUnit") {
+        val controller = CardsController(call)
+        controller.updateCardUnit()
+    }
+}
+
 fun Route.getRanks() {
     get("/api/getRanks") {
         val controller = RanksController(call)

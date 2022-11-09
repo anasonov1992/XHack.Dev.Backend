@@ -120,4 +120,29 @@ class CardsDataSourceImpl : CardsDataSource {
             }.toCardUnitDto()
         )
     }
+
+    override suspend fun updateCardUnit(cardUnit: CreateCardUnitDto): DbResult<CardUnitDto> = dbQuery {
+        val dbCardUnit = CardUnit.findById(cardUnit.id) ?: return@dbQuery DbResult.NotFound
+        val dbFraction = Fraction.findById(cardUnit.fractionId) ?: return@dbQuery DbResult.NotFound
+        val dbRank = Rank.findById(cardUnit.rankId) ?: return@dbQuery DbResult.NotFound
+
+        var dbUnitClasses = emptyList<UnitClass>()
+        if (cardUnit.classIds.isNotEmpty()) {
+            dbUnitClasses = UnitClass.find { UnitClasses.id inList cardUnit.classIds }.toList()
+        }
+
+        DbResult.Success(
+            dbCardUnit.apply {
+                fraction = dbFraction
+                rank = dbRank
+                name = cardUnit.name
+                isUnique = cardUnit.isUnique
+                isNotMoreTwo = cardUnit.isNotMoreTwo
+                unitClasses = SizedCollection(dbUnitClasses)
+                flavor = cardUnit.flavor
+                description = cardUnit.description
+                imageUrl = cardUnit.imageUrl
+            }.toCardUnitDto()
+        )
+    }
 }

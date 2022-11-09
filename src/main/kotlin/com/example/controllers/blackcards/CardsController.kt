@@ -119,7 +119,26 @@ class CardsController(private val call: ApplicationCall) {
         }
 
         when (val dbResult = cardsDataSource.createCardUnit(cardUnit)) {
-            is DbResult.NotFound -> call.respond(HttpStatusCode.NotFound, "Rank is not found")
+            is DbResult.NotFound -> call.respond(HttpStatusCode.NotFound, "Fraction or rank are not found")
+            is DbResult.Conflict -> call.respond(HttpStatusCode.Conflict, "Conflict error")
+            is DbResult.Success ->  call.respond(HttpStatusCode.OK, dbResult.data)
+        }
+    }
+
+    suspend fun updateCardUnit() {
+        val userId = call.principal<JWTPrincipal>()?.getClaim(Constants.USER_CLAIM_NAME, String::class)
+        if (userId == null) {
+            call.respond(HttpStatusCode.Unauthorized, Constants.UNAUTHORIZED)
+            return
+        }
+
+        val cardUnit = call.receiveOrNull<CreateCardUnitDto>() ?: run {
+            call.respond(HttpStatusCode.BadRequest)
+            return
+        }
+
+        when (val dbResult = cardsDataSource.updateCardUnit(cardUnit)) {
+            is DbResult.NotFound -> call.respond(HttpStatusCode.NotFound, "Unit or fraction/rank are not found")
             is DbResult.Conflict -> call.respond(HttpStatusCode.Conflict, "Conflict error")
             is DbResult.Success ->  call.respond(HttpStatusCode.OK, dbResult.data)
         }

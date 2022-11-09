@@ -15,5 +15,6 @@ interface CardsDataSource {
     suspend fun getUnitClasses(): List<UnitClassDto>
     suspend fun createUnitClass(unitClass: UnitClassDto): DbResult<UnitClassDto>
     suspend fun getCardUnits(request: CardsPagingRequestDto): List<CardUnitDto>
-    suspend fun createCardUnit(card: CreateCardUnitDto): DbResult<CardUnitDto>
+    suspend fun createCardUnit(cardUnit: CreateCardUnitDto): DbResult<CardUnitDto>
+    suspend fun updateCardUnit(cardUnit: CreateCardUnitDto): DbResult<CardUnitDto>
 }

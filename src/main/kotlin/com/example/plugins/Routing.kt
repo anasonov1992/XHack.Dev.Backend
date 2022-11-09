@@ -65,6 +65,7 @@ fun Application.configureRouting() {
             createUnitClass()
             getCardUnits()
             createCardUnit()
+            updateCardUnit()
         }
 
         static {
