@@ -9,5 +9,18 @@ enum class UnitClassType {
     Beast,
     Gremlin,
     Soldier,
-    Knight
+    Nobleman,
+    Knight,
+    Alvar,
+    Demon,
+    Wizard,
+    Merchant,
+    Hunter,
+    Lizard,
+    Hero,
+    Damn,
+    Orc,
+    Elite,
+    Advisor,
+    King
 }
