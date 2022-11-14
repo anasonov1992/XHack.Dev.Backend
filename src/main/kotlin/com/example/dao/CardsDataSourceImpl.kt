@@ -4,10 +4,7 @@ import com.example.dao.DatabaseFactory.dbQuery
 import com.example.dao.entities.blackcards.*
 import com.example.dao.interfaces.blackcards.CardsDataSource
 import com.example.dao.mappers.blackcards.*
-import com.example.dao.tables.blackcards.CardUnits
-import com.example.dao.tables.blackcards.Cards
-import com.example.dao.tables.blackcards.Fractions
-import com.example.dao.tables.blackcards.UnitClasses
+import com.example.dao.tables.blackcards.*
 import com.example.data.models.blackcards.*
 import com.example.data.requests.SearchPagingRequestDto
 import com.example.data.requests.blackcards.CardsPagingRequestDto
@@ -143,6 +140,69 @@ class CardsDataSourceImpl : CardsDataSource {
                 description = cardUnit.description
                 imageUrl = cardUnit.imageUrl
             }.toCardUnitDto()
+        )
+    }
+
+    override suspend fun getSpellTypes(): List<SpellTypeDto> = dbQuery {
+        SpellType.all().map { it.toSpellTypeDto() }
+    }
+
+    override suspend fun createSpellType(spellType: SpellTypeDto): DbResult<SpellTypeDto> = dbQuery {
+        DbResult.Success(
+            SpellType.new {
+                type = spellType.type
+                displayName = spellType.displayName
+            }.toSpellTypeDto()
+        )
+    }
+
+    override suspend fun getCardSpells(request: CardsPagingRequestDto): List<CardSpellDto> = dbQuery {
+        request.run {
+            CardSpell.wrapRows(Fractions.innerJoin(CardSpells)
+                .select { Fractions.id eq fractionId })
+                .limit(pageSize, pageSize * pageNumber)
+                .map { it.toCardSpellDto() }
+        }
+    }
+
+    override suspend fun createCardSpell(cardSpell: CreateCardSpellDto): DbResult<CardSpellDto> = dbQuery {
+        val dbFraction = Fraction.findById(cardSpell.fractionId) ?: return@dbQuery DbResult.NotFound
+
+        var dbSpellTypes = emptyList<SpellType>()
+        if (cardSpell.typesIds.isNotEmpty()) {
+            dbSpellTypes = SpellType.find { SpellTypes.id inList cardSpell.typesIds }.toList()
+        }
+
+        DbResult.Success(
+            CardSpell.new {
+                fraction = dbFraction
+                name = cardSpell.name
+                spellTypes = SizedCollection(dbSpellTypes)
+                flavor = cardSpell.flavor
+                description = cardSpell.description
+                imageUrl = cardSpell.imageUrl
+            }.toCardSpellDto()
+        )
+    }
+
+    override suspend fun updateCardSpell(cardSpell: CreateCardSpellDto): DbResult<CardSpellDto> = dbQuery {
+        val dbCardSpell = CardSpell.findById(cardSpell.id) ?: return@dbQuery DbResult.NotFound
+        val dbFraction = Fraction.findById(cardSpell.fractionId) ?: return@dbQuery DbResult.NotFound
+
+        var dbSpellTypes = emptyList<SpellType>()
+        if (cardSpell.typesIds.isNotEmpty()) {
+            dbSpellTypes = SpellType.find { SpellTypes.id inList cardSpell.typesIds }.toList()
+        }
+
+        DbResult.Success(
+            dbCardSpell.apply {
+                fraction = dbFraction
+                name = cardSpell.name
+                spellTypes = SizedCollection(dbSpellTypes)
+                flavor = cardSpell.flavor
+                description = cardSpell.description
+                imageUrl = cardSpell.imageUrl
+            }.toCardSpellDto()
         )
     }
 }

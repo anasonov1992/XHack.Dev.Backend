@@ -3,6 +3,7 @@ package com.example.controllers.blackcards
 import com.example.dao.interfaces.blackcards.CardsDataSource
 import com.example.data.models.blackcards.CardUnitDto
 import com.example.data.models.blackcards.CreateCardArtDto
+import com.example.data.models.blackcards.CreateCardSpellDto
 import com.example.data.models.blackcards.CreateCardUnitDto
 import com.example.data.requests.SearchPagingRequestDto
 import com.example.data.requests.blackcards.CardsPagingRequestDto
@@ -139,6 +140,59 @@ class CardsController(private val call: ApplicationCall) {
 
         when (val dbResult = cardsDataSource.updateCardUnit(cardUnit)) {
             is DbResult.NotFound -> call.respond(HttpStatusCode.NotFound, "Unit or fraction/rank are not found")
+            is DbResult.Conflict -> call.respond(HttpStatusCode.Conflict, "Conflict error")
+            is DbResult.Success ->  call.respond(HttpStatusCode.OK, dbResult.data)
+        }
+    }
+
+    suspend fun getCardSpells() {
+        val userId = call.principal<JWTPrincipal>()?.getClaim(Constants.USER_CLAIM_NAME, String::class)
+        if (userId == null) {
+            call.respond(HttpStatusCode.Unauthorized, Constants.UNAUTHORIZED)
+            return
+        }
+
+        val request = call.receiveOrNull<CardsPagingRequestDto>() ?: run {
+            call.respond(HttpStatusCode.BadRequest, Constants.INVALID_REQUEST)
+            return
+        }
+
+        call.respond(HttpStatusCode.OK, cardsDataSource.getCardSpells(request))
+    }
+
+    suspend fun createCardSpell() {
+        val userId = call.principal<JWTPrincipal>()?.getClaim(Constants.USER_CLAIM_NAME, String::class)
+        if (userId == null) {
+            call.respond(HttpStatusCode.Unauthorized, Constants.UNAUTHORIZED)
+            return
+        }
+
+        val cardSpell = call.receiveOrNull<CreateCardSpellDto>() ?: run {
+            call.respond(HttpStatusCode.BadRequest)
+            return
+        }
+
+        when (val dbResult = cardsDataSource.createCardSpell(cardSpell)) {
+            is DbResult.NotFound -> call.respond(HttpStatusCode.NotFound, "Fraction is not found")
+            is DbResult.Conflict -> call.respond(HttpStatusCode.Conflict, "Conflict error")
+            is DbResult.Success ->  call.respond(HttpStatusCode.OK, dbResult.data)
+        }
+    }
+
+    suspend fun updateCardSpell() {
+        val userId = call.principal<JWTPrincipal>()?.getClaim(Constants.USER_CLAIM_NAME, String::class)
+        if (userId == null) {
+            call.respond(HttpStatusCode.Unauthorized, Constants.UNAUTHORIZED)
+            return
+        }
+
+        val cardSpell = call.receiveOrNull<CreateCardSpellDto>() ?: run {
+            call.respond(HttpStatusCode.BadRequest)
+            return
+        }
+
+        when (val dbResult = cardsDataSource.updateCardSpell(cardSpell)) {
+            is DbResult.NotFound -> call.respond(HttpStatusCode.NotFound, "Unit or fraction are not found")
             is DbResult.Conflict -> call.respond(HttpStatusCode.Conflict, "Conflict error")
             is DbResult.Success ->  call.respond(HttpStatusCode.OK, dbResult.data)
         }

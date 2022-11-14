@@ -2,6 +2,7 @@ package com.example.routes.blackcards
 
 import com.example.controllers.blackcards.CardsController
 import com.example.controllers.blackcards.RanksController
+import com.example.controllers.blackcards.SpellTypesController
 import com.example.controllers.blackcards.UnitClassesController
 import io.ktor.server.application.*
 import io.ktor.server.routing.*
@@ -80,5 +81,40 @@ fun Route.createUnitClass() {
     post("/api/createUnitClass") {
         val controller = UnitClassesController(call)
         controller.createUnitClass()
+    }
+}
+
+fun Route.getCardSpells() {
+    post("/api/getCardSpells") {
+        val controller = CardsController(call)
+        controller.getCardSpells()
+    }
+}
+
+fun Route.createCardSpell() {
+    post("/api/createCardSpell") {
+        val controller = CardsController(call)
+        controller.createCardSpell()
+    }
+}
+
+fun Route.updateCardSpell() {
+    post("/api/updateCardSpell") {
+        val controller = CardsController(call)
+        controller.updateCardSpell()
+    }
+}
+
+fun Route.getSpellTypes() {
+    get("/api/getSpellTypes") {
+        val controller = SpellTypesController(call)
+        controller.getSpellTypes()
+    }
+}
+
+fun Route.createSpellType() {
+    post("/api/createSpellType") {
+        val controller = SpellTypesController(call)
+        controller.createSpellType()
     }
 }

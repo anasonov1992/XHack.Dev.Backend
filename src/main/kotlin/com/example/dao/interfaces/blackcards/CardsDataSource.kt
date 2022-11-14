@@ -17,4 +17,9 @@ interface CardsDataSource {
     suspend fun getCardUnits(request: CardsPagingRequestDto): List<CardUnitDto>
     suspend fun createCardUnit(cardUnit: CreateCardUnitDto): DbResult<CardUnitDto>
     suspend fun updateCardUnit(cardUnit: CreateCardUnitDto): DbResult<CardUnitDto>
+    suspend fun getSpellTypes(): List<SpellTypeDto>
+    suspend fun createSpellType(spellType: SpellTypeDto): DbResult<SpellTypeDto>
+    suspend fun getCardSpells(request: CardsPagingRequestDto): List<CardSpellDto>
+    suspend fun createCardSpell(cardSpell: CreateCardSpellDto): DbResult<CardSpellDto>
+    suspend fun updateCardSpell(cardSpell: CreateCardSpellDto): DbResult<CardSpellDto>
 }

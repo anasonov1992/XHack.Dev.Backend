@@ -1,9 +1,6 @@
 package com.example.dao.mappers.blackcards
 
-import com.example.dao.entities.blackcards.Card
-import com.example.dao.entities.blackcards.CardUnit
-import com.example.dao.entities.blackcards.Rank
-import com.example.dao.entities.blackcards.UnitClass
+import com.example.dao.entities.blackcards.*
 import com.example.data.models.blackcards.*
 
 fun Card.toCardArtDto(): CardArtDto {
@@ -20,3 +17,8 @@ fun UnitClass.toUnitClassDto() = UnitClassDto(id.value, type, displayName)
 
 fun CardUnit.toCardUnitDto() = CardUnitDto(
     id.value, rank.toRankDto(), name, isUnique, isNotMoreTwo, unitClasses.map { it.toUnitClassDto() }, flavor, description, imageUrl)
+
+fun SpellType.toSpellTypeDto() = SpellTypeDto(id.value, type, displayName)
+
+fun CardSpell.toCardSpellDto() = CardSpellDto(
+    id.value, name, spellTypes.map { it.toSpellTypeDto() }, flavor, description, imageUrl)

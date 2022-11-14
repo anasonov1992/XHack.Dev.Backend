@@ -66,6 +66,12 @@ fun Application.configureRouting() {
             getCardUnits()
             createCardUnit()
             updateCardUnit()
+
+            getSpellTypes()
+            createSpellType()
+            getCardSpells()
+            createCardSpell()
+            updateCardSpell()
         }
 
         static {
