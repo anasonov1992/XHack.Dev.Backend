@@ -16,6 +16,16 @@ import java.util.*
 class FilesController(private val call: ApplicationCall) {
     private val filesDataSource by KoinJavaComponent.inject<FilesDataSource>(FilesDataSource::class.java)
 
+    suspend fun getFiles() {
+        val userId = call.principal<JWTPrincipal>()?.getClaim(Constants.USER_CLAIM_NAME, String::class)
+        if (userId == null) {
+            call.respond(HttpStatusCode.Unauthorized, Constants.UNAUTHORIZED)
+            return
+        }
+
+        call.respond(HttpStatusCode.OK, filesDataSource.getFiles())
+    }
+
     suspend fun addFile(){
         val userId = call.principal<JWTPrincipal>()?.getClaim(Constants.USER_CLAIM_NAME, String::class)
         if (userId == null) {

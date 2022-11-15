@@ -46,6 +46,7 @@ fun Application.configureRouting() {
             deleteChat()
 
             // Files
+            getFiles()
             upload()
             download()
             addFile()

@@ -25,3 +25,10 @@ fun Route.addFile() {
         controller.addFile()
     }
 }
+
+fun Route.getFiles() {
+    get("/api/getFiles") {
+        val controller = FilesController(call)
+        controller.getFiles()
+    }
+}

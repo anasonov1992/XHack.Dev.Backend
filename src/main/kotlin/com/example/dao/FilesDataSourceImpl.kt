@@ -22,4 +22,8 @@ class FilesDataSourceImpl : FilesDataSource {
     override suspend fun get(guid: UUID): FileDto? = dbQuery {
         File.find { Files.guid eq guid }.firstOrNull()?.toFileDto()
     }
+
+    override suspend fun getFiles(): List<FileDto> = dbQuery {
+        File.all().map { it.toFileDto() }
+    }
 }
