@@ -19,16 +19,16 @@ fun Route.download() {
     }
 }
 
-fun Route.addFile() {
-    post("/api/addFile") {
-        val controller = FilesController(call)
-        controller.addFile()
-    }
-}
-
 fun Route.getFiles() {
     get("/api/getFiles") {
         val controller = FilesController(call)
         controller.getFiles()
+    }
+}
+
+fun Route.deleteFile() {
+    delete("/api/deleteFile") {
+        val controller = FilesController(call)
+        controller.deleteFile()
     }
 }

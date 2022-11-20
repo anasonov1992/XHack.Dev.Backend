@@ -2,6 +2,8 @@ package com.example.controllers
 
 import com.example.dao.interfaces.FilesDataSource
 import com.example.data.models.CreateFileDto
+import com.example.data.models.FileGuidDto
+import com.example.data.models.FileModel
 import com.example.utils.Constants
 import io.ktor.http.*
 import io.ktor.server.application.*
@@ -9,6 +11,7 @@ import io.ktor.server.auth.*
 import io.ktor.server.auth.jwt.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
+import org.apache.http.annotation.Obsolete
 import org.koin.java.KoinJavaComponent
 import java.io.File
 import java.util.*
@@ -25,21 +28,7 @@ class FilesController(private val call: ApplicationCall) {
 
         call.respond(HttpStatusCode.OK, filesDataSource.getFiles())
     }
-
-    suspend fun addFile(){
-        val userId = call.principal<JWTPrincipal>()?.getClaim(Constants.USER_CLAIM_NAME, String::class)
-        if (userId == null) {
-            call.respond(HttpStatusCode.Unauthorized, Constants.UNAUTHORIZED)
-            return
-        }
-
-        val file = call.receiveOrNull<CreateFileDto>() ?: run {
-            call.respond(HttpStatusCode.BadRequest)
-            return
-        }
-
-        call.respond(HttpStatusCode.OK, filesDataSource.add(file))
-    }
+    
 
     suspend fun download() {
         val userId = call.principal<JWTPrincipal>()?.getClaim(Constants.USER_CLAIM_NAME, String::class)
@@ -53,21 +42,47 @@ class FilesController(private val call: ApplicationCall) {
             return
         }
 
-        val fileData = filesDataSource.get(UUID.fromString(guid))
+        val fileData: FileModel? = filesDataSource.getFile(UUID.fromString(guid))
         if (fileData == null) {
             call.respond(HttpStatusCode.NotFound, Constants.FILE_NOT_FOUND)
             return
         }
 
-        val fileFullName = "${fileData.name}.${fileData.extension}"
-        val filePath = "files/${fileData.path}${fileFullName}"
-        val file = File(filePath)
+        fileData.fileBinary?.let {
+            val fileFullName = "${fileData.name}.${fileData.extension}"
+            val file = File.createTempFile(fileData.name, null)
+            file.writeBytes(it)
 
-        call.response.header(
-            HttpHeaders.ContentDisposition,
-            ContentDisposition.Attachment.withParameter(ContentDisposition.Parameters.FileName, fileFullName)
-                .toString()
-        )
-        call.respondFile(file)
+            call.response.header(
+                HttpHeaders.ContentDisposition,
+                ContentDisposition.Attachment.withParameter(ContentDisposition.Parameters.FileName, fileFullName)
+                    .toString()
+            )
+            call.respondFile(file)
+            return@let
+        }
+
+        call.respond(HttpStatusCode.InternalServerError, "An error happens when downloading a file")
+    }
+
+
+    suspend fun deleteFile() {
+        val userId = call.principal<JWTPrincipal>()?.getClaim(Constants.USER_CLAIM_NAME, String::class)
+        if (userId == null) {
+            call.respond(HttpStatusCode.Unauthorized, Constants.UNAUTHORIZED)
+            return
+        }
+
+        val fileData = call.receiveOrNull<FileGuidDto>() ?: run {
+            call.respond(HttpStatusCode.BadRequest, Constants.INVALID_REQUEST)
+            return
+        }
+
+        val deletedFile = filesDataSource.deleteFile(fileData.guid)
+        if (deletedFile == null) {
+            call.respond(HttpStatusCode.BadRequest, Constants.FILE_NOT_FOUND)
+        }
+
+        call.respond(HttpStatusCode.OK)
     }
 }

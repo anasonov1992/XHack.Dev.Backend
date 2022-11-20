@@ -49,7 +49,7 @@ fun Application.configureRouting() {
             getFiles()
             upload()
             download()
-            addFile()
+            deleteFile()
 
             // Black Cards
             getFractions()

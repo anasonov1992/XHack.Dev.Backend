@@ -1,18 +1,19 @@
 package com.example.controllers
 
-import com.example.data.responses.UploadFileResponse
-import com.example.utils.Constants
+import com.example.dao.interfaces.FilesDataSource
+import com.example.data.models.CreateFileDto
+import com.example.utils.DbResult
 import io.ktor.http.*
 import io.ktor.http.content.*
 import io.ktor.server.application.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
-import java.io.File
+import org.koin.java.KoinJavaComponent
 
 class UploadController(private val call: ApplicationCall) {
+    private val filesDataSource by KoinJavaComponent.inject<FilesDataSource>(FilesDataSource::class.java)
+
     suspend fun upload() {
-        var filePath = ""
-        var fileName = ""
         val multipartData = call.receiveMultipart()
 
         multipartData.forEachPart { part ->
@@ -20,34 +21,29 @@ class UploadController(private val call: ApplicationCall) {
                 is PartData.FileItem -> {
                     if (part.originalFileName == null) {
                         call.respond(HttpStatusCode.BadRequest, "Missing uploaded file name")
+                        return@forEachPart
                     }
                     else {
-                        part.streamProvider().use {
-                            var fileBytes = it.readBytes()
-                            fileName = part.originalFileName!!
-                            filePath = "${Constants.UPLOAD_PATH}"
+                        part.streamProvider().use { fileStream ->
+                            part.originalFileName?.let { fileName ->
+                                val fileNameParts = fileName.split('.')
+                                if (fileNameParts.count() > 1) {
+                                    var fileBytes = fileStream.readBytes()
 
-                            println("fileName: $fileName")
-
-                            val folder = File(filePath)
-                            if (!folder.exists()) {
-                                println("filePath: $filePath doesn't exist")
-                                println("filePath: $filePath exists: ${folder.mkdir()}")
+                                    when (val dbResult = filesDataSource.createFile(CreateFileDto(fileNameParts[0], fileNameParts[1]), fileBytes)) {
+                                        is DbResult.Success ->  call.respond(HttpStatusCode.OK, dbResult.data)
+                                        else -> call.respond(HttpStatusCode.InternalServerError, "An error happens when creating a file")
+                                    }
+                                }
                             }
-
-                            val uploadedFile = File("${filePath}/${fileName}")
-                            uploadedFile.writeBytes(fileBytes)
                         }
                     }
-
                     part.dispose()
                 }
-                else -> {
-                    call.respond(HttpStatusCode.BadRequest, "Wrong uploaded file format")
-                }
+                else -> Unit
             }
         }
 
-        call.respond(HttpStatusCode.OK, UploadFileResponse("${Constants.BASE_URL}/${filePath}/${fileName}"))
+        call.respond(HttpStatusCode.BadRequest, "Wrong uploaded file format")
     }
 }
