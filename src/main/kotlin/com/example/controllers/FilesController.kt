@@ -28,14 +28,15 @@ class FilesController(private val call: ApplicationCall) {
 
         call.respond(HttpStatusCode.OK, filesDataSource.getFiles())
     }
-    
+
 
     suspend fun download() {
-        val userId = call.principal<JWTPrincipal>()?.getClaim(Constants.USER_CLAIM_NAME, String::class)
-        if (userId == null) {
-            call.respond(HttpStatusCode.Unauthorized, Constants.UNAUTHORIZED)
-            return
-        }
+        //FIXME
+//        val userId = call.principal<JWTPrincipal>()?.getClaim(Constants.USER_CLAIM_NAME, String::class)
+//        if (userId == null) {
+//            call.respond(HttpStatusCode.Unauthorized, Constants.UNAUTHORIZED)
+//            return
+//        }
 
         val guid = call.parameters["guid"] ?: run {
             call.respond(HttpStatusCode.BadRequest, Constants.INVALID_REQUEST)

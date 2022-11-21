@@ -27,6 +27,9 @@ fun Application.configureRouting() {
         login(tokenConfig)
         register(tokenConfig)
 
+        //FIXME
+        download()
+
         authenticate("auth-jwt") {
             getRequests()
             createRequest()
@@ -48,7 +51,6 @@ fun Application.configureRouting() {
             // Files
             getFiles()
             upload()
-            download()
             deleteFile()
 
             // Black Cards
