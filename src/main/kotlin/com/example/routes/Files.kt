@@ -20,7 +20,7 @@ fun Route.download() {
 }
 
 fun Route.getFiles() {
-    get("/api/getFiles") {
+    post("/api/getFiles") {
         val controller = FilesController(call)
         controller.getFiles()
     }

@@ -4,6 +4,7 @@ import com.example.dao.interfaces.FilesDataSource
 import com.example.data.models.CreateFileDto
 import com.example.data.models.FileGuidDto
 import com.example.data.models.FileModel
+import com.example.data.requests.SearchPagingRequestDto
 import com.example.utils.Constants
 import io.ktor.http.*
 import io.ktor.server.application.*
@@ -26,7 +27,12 @@ class FilesController(private val call: ApplicationCall) {
             return
         }
 
-        call.respond(HttpStatusCode.OK, filesDataSource.getFiles())
+        val request = call.receiveOrNull<SearchPagingRequestDto>() ?: run {
+            call.respond(HttpStatusCode.BadRequest, Constants.INVALID_REQUEST)
+            return
+        }
+
+        call.respond(HttpStatusCode.OK, filesDataSource.getFiles(request))
     }
 
 
