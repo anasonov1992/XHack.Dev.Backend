@@ -5,6 +5,7 @@ import com.example.data.models.CreateFileDto
 import com.example.data.models.FileGuidDto
 import com.example.data.models.FileModel
 import com.example.data.requests.SearchPagingRequestDto
+import com.example.data.requests.SearchRequestDto
 import com.example.utils.Constants
 import io.ktor.http.*
 import io.ktor.server.application.*
@@ -27,7 +28,7 @@ class FilesController(private val call: ApplicationCall) {
             return
         }
 
-        val request = call.receiveOrNull<SearchPagingRequestDto>() ?: run {
+        val request = call.receiveOrNull<SearchRequestDto>() ?: run {
             call.respond(HttpStatusCode.BadRequest, Constants.INVALID_REQUEST)
             return
         }
