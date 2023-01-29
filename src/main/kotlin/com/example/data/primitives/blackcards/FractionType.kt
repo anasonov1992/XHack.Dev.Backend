@@ -6,5 +6,6 @@ enum class FractionType {
     Anklav,
     DeadLand,
     AlvarianKingdom,
-    Kingland
+    Kingland,
+    Church
 }
