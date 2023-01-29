@@ -41,7 +41,7 @@ class SpellTypesController(private val call: ApplicationCall) {
         }
 
         when (val dbResult = cardsDataSource.createSpellType(spellType)) {
-            is DbResult.Success ->  call.respond(HttpStatusCode.OK, dbResult.data)
+            is DbResult.Success -> call.respond(HttpStatusCode.OK, dbResult.data)
             else -> call.respond(HttpStatusCode.Conflict, "Error")
         }
     }

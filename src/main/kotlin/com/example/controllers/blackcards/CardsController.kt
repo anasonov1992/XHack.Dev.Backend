@@ -50,7 +50,7 @@ class CardsController(private val call: ApplicationCall) {
         when (val dbResult = cardsDataSource.getCardArtDetail(id.toInt())) {
             is DbResult.NotFound -> call.respond(HttpStatusCode.NotFound, "Art is not found")
             is DbResult.Conflict -> call.respond(HttpStatusCode.Conflict, "Conflict error")
-            is DbResult.Success ->  call.respond(HttpStatusCode.OK, dbResult.data)
+            is DbResult.Success -> call.respond(HttpStatusCode.OK, dbResult.data)
         }
     }
 
@@ -69,7 +69,7 @@ class CardsController(private val call: ApplicationCall) {
         when (val dbResult = cardsDataSource.createCardArt(cardArt)) {
             is DbResult.NotFound -> call.respond(HttpStatusCode.NotFound, "Fraction is not found")
             is DbResult.Conflict -> call.respond(HttpStatusCode.Conflict, "Conflict error")
-            is DbResult.Success ->  call.respond(HttpStatusCode.OK, dbResult.data)
+            is DbResult.Success -> call.respond(HttpStatusCode.OK, dbResult.data)
         }
     }
 
@@ -88,7 +88,7 @@ class CardsController(private val call: ApplicationCall) {
         when (val dbResult = cardsDataSource.updateCardArt(cardArt)) {
             is DbResult.NotFound -> call.respond(HttpStatusCode.NotFound, "Art is not found")
             is DbResult.Conflict -> call.respond(HttpStatusCode.Conflict, "Conflict error")
-            is DbResult.Success ->  call.respond(HttpStatusCode.OK, dbResult.data)
+            is DbResult.Success -> call.respond(HttpStatusCode.OK, dbResult.data)
         }
     }
 
@@ -122,7 +122,7 @@ class CardsController(private val call: ApplicationCall) {
         when (val dbResult = cardsDataSource.createCardUnit(cardUnit)) {
             is DbResult.NotFound -> call.respond(HttpStatusCode.NotFound, "Fraction or rank are not found")
             is DbResult.Conflict -> call.respond(HttpStatusCode.Conflict, "Conflict error")
-            is DbResult.Success ->  call.respond(HttpStatusCode.OK, dbResult.data)
+            is DbResult.Success -> call.respond(HttpStatusCode.OK, dbResult.data)
         }
     }
 
@@ -141,7 +141,7 @@ class CardsController(private val call: ApplicationCall) {
         when (val dbResult = cardsDataSource.updateCardUnit(cardUnit)) {
             is DbResult.NotFound -> call.respond(HttpStatusCode.NotFound, "Unit or fraction/rank are not found")
             is DbResult.Conflict -> call.respond(HttpStatusCode.Conflict, "Conflict error")
-            is DbResult.Success ->  call.respond(HttpStatusCode.OK, dbResult.data)
+            is DbResult.Success -> call.respond(HttpStatusCode.OK, dbResult.data)
         }
     }
 
@@ -175,7 +175,7 @@ class CardsController(private val call: ApplicationCall) {
         when (val dbResult = cardsDataSource.createCardSpell(cardSpell)) {
             is DbResult.NotFound -> call.respond(HttpStatusCode.NotFound, "Fraction is not found")
             is DbResult.Conflict -> call.respond(HttpStatusCode.Conflict, "Conflict error")
-            is DbResult.Success ->  call.respond(HttpStatusCode.OK, dbResult.data)
+            is DbResult.Success -> call.respond(HttpStatusCode.OK, dbResult.data)
         }
     }
 
@@ -194,7 +194,7 @@ class CardsController(private val call: ApplicationCall) {
         when (val dbResult = cardsDataSource.updateCardSpell(cardSpell)) {
             is DbResult.NotFound -> call.respond(HttpStatusCode.NotFound, "Unit or fraction are not found")
             is DbResult.Conflict -> call.respond(HttpStatusCode.Conflict, "Conflict error")
-            is DbResult.Success ->  call.respond(HttpStatusCode.OK, dbResult.data)
+            is DbResult.Success -> call.respond(HttpStatusCode.OK, dbResult.data)
         }
     }
 }

@@ -40,7 +40,7 @@ class UnitClassesController(private val call: ApplicationCall) {
         }
 
         when (val dbResult = cardsDataSource.createUnitClass(unitClass)) {
-            is DbResult.Success ->  call.respond(HttpStatusCode.OK, dbResult.data)
+            is DbResult.Success -> call.respond(HttpStatusCode.OK, dbResult.data)
             else -> call.respond(HttpStatusCode.Conflict, "Error")
         }
     }

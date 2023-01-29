@@ -56,7 +56,7 @@ class FractionsController(private val call: ApplicationCall) {
         when (val dbResult = fractionsDataSource.updateFraction(fraction)) {
             is DbResult.NotFound -> call.respond(HttpStatusCode.NotFound, "Fraction is not found")
             is DbResult.Conflict -> call.respond(HttpStatusCode.Conflict, "Conflict error")
-            is DbResult.Success ->  call.respond(HttpStatusCode.OK, dbResult.data)
+            is DbResult.Success -> call.respond(HttpStatusCode.OK, dbResult.data)
         }
     }
 }
