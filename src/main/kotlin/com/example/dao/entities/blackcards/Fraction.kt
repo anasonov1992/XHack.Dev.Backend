@@ -13,5 +13,6 @@ class Fraction(id: EntityID<Int>) : IntEntity(id) {
     var name by Fractions.name
     var description by Fractions.description
     var artUrl by Fractions.artUrl
+    var logoUrl by Fractions.logoUrl
     val cards by Card referrersOn Cards.fraction
 }

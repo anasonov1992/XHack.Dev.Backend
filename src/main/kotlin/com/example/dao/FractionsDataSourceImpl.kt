@@ -18,6 +18,7 @@ class FractionsDataSourceImpl : FractionsDataSource {
             name = fraction.name
             description = fraction.description
             artUrl = fraction.artUrl
+            logoUrl = fraction.logoUrl
         }.toFractionDto()
     }
 
@@ -30,6 +31,7 @@ class FractionsDataSourceImpl : FractionsDataSource {
                 name = fraction.name
                 description = fraction.description
                 artUrl = fraction.artUrl
+                logoUrl = fraction.logoUrl
             }.toFractionDto()
         )
     }

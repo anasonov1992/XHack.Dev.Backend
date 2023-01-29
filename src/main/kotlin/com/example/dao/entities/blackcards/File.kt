@@ -13,4 +13,5 @@ class File(id: EntityID<Int>) : IntEntity(id) {
     var extension by Files.extension
     var path by Files.path
     var fileBinary by Files.fileBinary
+    var fraction by Fraction optionalReferencedOn Files.fraction
 }

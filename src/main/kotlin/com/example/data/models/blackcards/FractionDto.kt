@@ -8,5 +8,6 @@ data class FractionDto(
     val type: FractionType,
     val name: String,
     val description: String,
-    val artUrl: String? = null
+    val artUrl: String? = null,
+    val logoUrl: String? = null
 )

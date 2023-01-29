@@ -8,4 +8,5 @@ object Fractions : IntIdTable() {
     val name = varchar("name", 128)
     val description = text("description")
     val artUrl = varchar("art_url", 512).nullable()
+    val logoUrl = varchar("logo_url", 512).nullable()
 }
