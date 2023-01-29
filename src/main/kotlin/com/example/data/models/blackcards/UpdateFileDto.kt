@@ -1,14 +1,12 @@
-package com.example.data.models
+package com.example.data.models.blackcards
 
 import com.example.utils.UUIDSerializer
 import kotlinx.serialization.Serializable
 import java.util.*
 
 @Serializable
-data class FileDto(
+data class UpdateFileDto(
     @Serializable(with = UUIDSerializer::class)
     val guid: UUID,
-    val name: String,
-    val extension: String,
-    val imageUrl: String?
+    val fractionId: Int? = null
 )

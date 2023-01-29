@@ -65,7 +65,7 @@ class ChatsController(private val call: ApplicationCall) {
         when (val dbResult = chatsDataSource.createP2PChat(userId.toInt(), chatData)) {
             is DbResult.NotFound -> call.respond(HttpStatusCode.NotFound, "Sender or companion are not found")
             is DbResult.Conflict -> call.respond(HttpStatusCode.Conflict, Constants.P2P_CHAT_EXISTS)
-            is DbResult.Success ->  call.respond(HttpStatusCode.OK, dbResult.data)
+            is DbResult.Success -> call.respond(HttpStatusCode.OK, dbResult.data)
         }
     }
 
@@ -84,7 +84,7 @@ class ChatsController(private val call: ApplicationCall) {
         when (val dbResult = chatsDataSource.createTeamChat(userId.toInt(), chatData)) {
             is DbResult.NotFound -> call.respond(HttpStatusCode.NotFound, Constants.TEAM_NOT_FOUND)
             is DbResult.Conflict -> call.respond(HttpStatusCode.Conflict, Constants.TEAM_CHAT_EXISTS)
-            is DbResult.Success ->  call.respond(HttpStatusCode.OK, dbResult.data)
+            is DbResult.Success -> call.respond(HttpStatusCode.OK, dbResult.data)
         }
     }
 
@@ -103,7 +103,7 @@ class ChatsController(private val call: ApplicationCall) {
         when (val dbResult = chatsDataSource.createMessage(messageData)) {
             is DbResult.NotFound -> call.respond(HttpStatusCode.NotFound, Constants.CHAT_OR_SENDER_NOT_FOUND)
             is DbResult.Conflict -> call.respond(HttpStatusCode.Conflict)
-            is DbResult.Success ->  call.respond(HttpStatusCode.OK, dbResult.data)
+            is DbResult.Success -> call.respond(HttpStatusCode.OK, dbResult.data)
         }
     }
 

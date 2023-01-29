@@ -5,6 +5,7 @@ import com.example.data.models.CreateFileDto
 import com.example.utils.DbResult
 import io.ktor.http.*
 import io.ktor.http.content.*
+import io.ktor.server.http.content.*
 import io.ktor.server.application.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
@@ -22,17 +23,22 @@ class UploadController(private val call: ApplicationCall) {
                     if (part.originalFileName == null) {
                         call.respond(HttpStatusCode.BadRequest, "Missing uploaded file name")
                         return@forEachPart
-                    }
-                    else {
+                    } else {
                         part.streamProvider().use { fileStream ->
                             part.originalFileName?.let { fileName ->
                                 val fileNameParts = fileName.split('.')
                                 if (fileNameParts.count() > 1) {
                                     var fileBytes = fileStream.readBytes()
 
-                                    when (val dbResult = filesDataSource.createFile(CreateFileDto(fileNameParts[0], fileNameParts[1]), fileBytes)) {
-                                        is DbResult.Success ->  call.respond(HttpStatusCode.OK, dbResult.data)
-                                        else -> call.respond(HttpStatusCode.InternalServerError, "An error happens when creating a file")
+                                    when (val dbResult = filesDataSource.createFile(
+                                        CreateFileDto(fileNameParts[0], fileNameParts[1]),
+                                        fileBytes
+                                    )) {
+                                        is DbResult.Success -> call.respond(HttpStatusCode.OK, dbResult.data)
+                                        else -> call.respond(
+                                            HttpStatusCode.InternalServerError,
+                                            "An error happens when creating a file"
+                                        )
                                     }
                                 }
                             }
@@ -40,6 +46,7 @@ class UploadController(private val call: ApplicationCall) {
                     }
                     part.dispose()
                 }
+
                 else -> Unit
             }
         }

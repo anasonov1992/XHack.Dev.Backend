@@ -26,6 +26,13 @@ fun Route.getFiles() {
     }
 }
 
+fun Route.updateFile() {
+    post("/api/updateFile") {
+        val controller = FilesController(call)
+        controller.updateFile()
+    }
+}
+
 fun Route.deleteFile() {
     delete("/api/deleteFile") {
         val controller = FilesController(call)

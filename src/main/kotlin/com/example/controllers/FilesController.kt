@@ -4,9 +4,12 @@ import com.example.dao.interfaces.FilesDataSource
 import com.example.data.models.CreateFileDto
 import com.example.data.models.FileGuidDto
 import com.example.data.models.FileModel
+import com.example.data.models.blackcards.FractionDto
+import com.example.data.models.blackcards.UpdateFileDto
 import com.example.data.requests.SearchPagingRequestDto
 import com.example.data.requests.SearchRequestDto
 import com.example.utils.Constants
+import com.example.utils.DbResult
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
@@ -38,13 +41,6 @@ class FilesController(private val call: ApplicationCall) {
 
 
     suspend fun download() {
-        //FIXME
-//        val userId = call.principal<JWTPrincipal>()?.getClaim(Constants.USER_CLAIM_NAME, String::class)
-//        if (userId == null) {
-//            call.respond(HttpStatusCode.Unauthorized, Constants.UNAUTHORIZED)
-//            return
-//        }
-
         val guid = call.parameters["guid"] ?: run {
             call.respond(HttpStatusCode.BadRequest, Constants.INVALID_REQUEST)
             return
@@ -71,6 +67,26 @@ class FilesController(private val call: ApplicationCall) {
         }
 
         call.respond(HttpStatusCode.InternalServerError, "An error happens when downloading a file")
+    }
+
+
+    suspend fun updateFile() {
+        val userId = call.principal<JWTPrincipal>()?.getClaim(Constants.USER_CLAIM_NAME, String::class)
+        if (userId == null) {
+            call.respond(HttpStatusCode.Unauthorized, Constants.UNAUTHORIZED)
+            return
+        }
+
+        val file = call.receiveOrNull<UpdateFileDto>() ?: run {
+            call.respond(HttpStatusCode.BadRequest)
+            return
+        }
+
+        when (val dbResult = filesDataSource.updateFile(file)) {
+            is DbResult.NotFound -> call.respond(HttpStatusCode.NotFound, "File is not found")
+            is DbResult.Conflict -> call.respond(HttpStatusCode.Conflict, "Conflict error")
+            is DbResult.Success -> call.respond(HttpStatusCode.OK, dbResult.data)
+        }
     }
 
 

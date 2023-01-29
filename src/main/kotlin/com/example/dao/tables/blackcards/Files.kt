@@ -8,4 +8,5 @@ object Files : IntIdTable() {
     val extension = varchar("extension", 32)
     val path = varchar("path", 128)
     val fileBinary = binary("file_binary").nullable()
+    val fraction = reference("fraction", Fractions).nullable()
 }

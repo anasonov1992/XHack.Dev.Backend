@@ -51,6 +51,7 @@ fun Application.configureRouting() {
             // Files
             getFiles()
             upload()
+            updateFile()
             deleteFile()
 
             // Black Cards
