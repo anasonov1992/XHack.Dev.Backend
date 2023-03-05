@@ -1,3 +1,5 @@
+import com.google.cloud.tools.gradle.appengine.appyaml.AppEngineAppYamlExtension
+
 val ktor_version: String by project
 val kotlin_version: String by project
 val logback_version: String by project
@@ -6,7 +8,9 @@ val exposed_version: String by project
 plugins {
     application
     kotlin("jvm") version "1.7.10"
-                id("org.jetbrains.kotlin.plugin.serialization") version "1.7.10"
+    id("org.jetbrains.kotlin.plugin.serialization") version "1.7.10"
+    id("com.github.johnrengelman.shadow") version "7.1.2"
+    id("com.google.cloud.tools.appengine") version "2.4.5"
 }
 
 group = "com.example"
@@ -56,4 +60,14 @@ dependencies {
 
 tasks.create("stage") {
     dependsOn("installDist")
+}
+
+configure<AppEngineAppYamlExtension> {
+    stage {
+        setArtifact("build/libs/${project.name}-${project.version}-all.jar")
+    }
+    deploy {
+        version = "1"
+        projectId = "black-cards-379611"
+    }
 }
