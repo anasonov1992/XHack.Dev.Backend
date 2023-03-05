@@ -108,8 +108,7 @@ class CardsDataSourceImpl : CardsDataSource {
                 fraction = dbFraction
                 rank = dbRank
                 name = cardUnit.name
-                isUnique = cardUnit.isUnique
-                isNotMoreTwo = cardUnit.isNotMoreTwo
+                uniqueType = cardUnit.uniqueType
                 unitClasses = SizedCollection(dbUnitClasses)
                 flavor = cardUnit.flavor
                 description = cardUnit.description
@@ -133,8 +132,7 @@ class CardsDataSourceImpl : CardsDataSource {
                 fraction = dbFraction
                 rank = dbRank
                 name = cardUnit.name
-                isUnique = cardUnit.isUnique
-                isNotMoreTwo = cardUnit.isNotMoreTwo
+                uniqueType = cardUnit.uniqueType
                 unitClasses = SizedCollection(dbUnitClasses)
                 flavor = cardUnit.flavor
                 description = cardUnit.description

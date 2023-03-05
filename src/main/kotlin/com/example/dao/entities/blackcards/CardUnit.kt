@@ -12,8 +12,7 @@ class CardUnit(id: EntityID<Int>) : IntEntity(id) {
     var fraction by Fraction referencedOn CardUnits.fraction
     var rank by Rank referencedOn CardUnits.rank
     var name by CardUnits.name
-    var isUnique by CardUnits.isUnique
-    var isNotMoreTwo by CardUnits.isNotMoreTwo
+    var uniqueType by CardUnits.uniqueType
     var unitClasses by UnitClass via CardsUnitClasses
     var flavor by CardUnits.flavor
     var description by CardUnits.description

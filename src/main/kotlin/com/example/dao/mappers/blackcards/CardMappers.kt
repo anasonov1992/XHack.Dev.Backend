@@ -16,7 +16,7 @@ fun Rank.toRankDto() = RankDto(id.value, displayName)
 fun UnitClass.toUnitClassDto() = UnitClassDto(id.value, type, displayName)
 
 fun CardUnit.toCardUnitDto() = CardUnitDto(
-    id.value, rank.toRankDto(), name, isUnique, isNotMoreTwo, unitClasses.map { it.toUnitClassDto() }, flavor, description, imageUrl)
+    id.value, rank.toRankDto(), name, uniqueType, unitClasses.map { it.toUnitClassDto() }, flavor, description, imageUrl)
 
 fun SpellType.toSpellTypeDto() = SpellTypeDto(id.value, type, displayName)
 
