@@ -13,5 +13,6 @@ data class CreateCardUnitDto(
     val classIds: List<Int>,
     val flavor: String,
     val description: String,
-    val imageUrl: String?
+    val imageUrl: String?,
+    val imageFullUrl: String?
 )

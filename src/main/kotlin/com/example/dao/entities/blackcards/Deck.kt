@@ -10,5 +10,5 @@ class Deck(id: EntityID<Int>) : IntEntity(id) {
 
     var name by Decks.name
     var created by Decks.created
-    var fraction by Deck referencedOn Decks.fraction
+    var fraction by Fraction referencedOn Decks.fraction
 }

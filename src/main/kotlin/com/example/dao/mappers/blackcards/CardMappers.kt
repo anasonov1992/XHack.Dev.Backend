@@ -11,12 +11,12 @@ fun Card.toCardArtDetailDto(): CardArtDetailDto {
     return CardArtDetailDto(id.value, name, description, artUrlDetail, fraction.name)
 }
 
-fun Rank.toRankDto() = RankDto(id.value, displayName)
+fun Rank.toRankDto() = RankDto(id.value, type, displayName, maxCardsInDeckCount, cardsUpMsgText)
 
 fun UnitClass.toUnitClassDto() = UnitClassDto(id.value, type, displayName)
 
 fun CardUnit.toCardUnitDto() = CardUnitDto(
-    id.value, rank.toRankDto(), name, uniqueType, unitClasses.map { it.toUnitClassDto() }, flavor, description, imageUrl)
+    id.value, rank.toRankDto(), name, uniqueType, unitClasses.map { it.toUnitClassDto() }, flavor, description, imageUrl, imageFullUrl)
 
 fun SpellType.toSpellTypeDto() = SpellTypeDto(id.value, type, displayName)
 

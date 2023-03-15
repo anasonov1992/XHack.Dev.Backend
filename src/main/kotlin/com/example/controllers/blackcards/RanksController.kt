@@ -43,4 +43,22 @@ class RanksController(private val call: ApplicationCall) {
             else -> call.respond(HttpStatusCode.Conflict, "Error")
         }
     }
+
+    suspend fun updateRank() {
+        val userId = call.principal<JWTPrincipal>()?.getClaim(Constants.USER_CLAIM_NAME, String::class)
+        if (userId == null) {
+            call.respond(HttpStatusCode.Unauthorized, Constants.UNAUTHORIZED)
+            return
+        }
+
+        val rank = call.receiveOrNull<RankDto>() ?: run {
+            call.respond(HttpStatusCode.BadRequest)
+            return
+        }
+
+        when (val dbResult = cardsDataSource.updateRank(rank)) {
+            is DbResult.Success -> call.respond(HttpStatusCode.OK, dbResult.data)
+            else -> call.respond(HttpStatusCode.Conflict, "Error")
+        }
+    }
 }

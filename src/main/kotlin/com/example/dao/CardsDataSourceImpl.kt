@@ -67,7 +67,23 @@ class CardsDataSourceImpl : CardsDataSource {
     override suspend fun createRank(rank: RankDto): DbResult<RankDto> = dbQuery {
         DbResult.Success(
             Rank.new {
+                type = rank.type
                 displayName = rank.displayName
+                maxCardsInDeckCount = rank.maxCardsOfRankCount
+                cardsUpMsgText =  rank.cardsUpText
+            }.toRankDto()
+        )
+    }
+
+    override suspend fun updateRank(rank: RankDto): DbResult<RankDto> = dbQuery {
+        val dbRank = Rank.findById(rank.id) ?: return@dbQuery DbResult.NotFound
+
+        DbResult.Success(
+            dbRank.apply {
+                type = rank.type
+                displayName = rank.displayName
+                maxCardsInDeckCount = rank.maxCardsOfRankCount
+                cardsUpMsgText =  rank.cardsUpText
             }.toRankDto()
         )
     }
@@ -113,6 +129,7 @@ class CardsDataSourceImpl : CardsDataSource {
                 flavor = cardUnit.flavor
                 description = cardUnit.description
                 imageUrl = cardUnit.imageUrl
+                imageFullUrl = cardUnit.imageFullUrl
             }.toCardUnitDto()
         )
     }

@@ -17,4 +17,5 @@ class CardUnit(id: EntityID<Int>) : IntEntity(id) {
     var flavor by CardUnits.flavor
     var description by CardUnits.description
     var imageUrl by CardUnits.imageUrl
+    var imageFullUrl by CardUnits.imageFullUrl
 }

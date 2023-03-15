@@ -12,6 +12,7 @@ interface CardsDataSource {
     suspend fun updateCardArt(cardArt: CreateCardArtDto): DbResult<CardArtDetailDto>
     suspend fun getRanks(): List<RankDto>
     suspend fun createRank(rank: RankDto): DbResult<RankDto>
+    suspend fun updateRank(rank: RankDto): DbResult<RankDto>
     suspend fun getUnitClasses(): List<UnitClassDto>
     suspend fun createUnitClass(unitClass: UnitClassDto): DbResult<UnitClassDto>
     suspend fun getCardUnits(request: CardsPagingRequestDto): List<CardUnitDto>

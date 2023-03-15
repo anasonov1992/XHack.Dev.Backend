@@ -70,6 +70,13 @@ fun Route.createRank() {
     }
 }
 
+fun Route.updateRank() {
+    post("/api/updateRank") {
+        val controller = RanksController(call)
+        controller.updateRank()
+    }
+}
+
 fun Route.getUnitClasses() {
     get("/api/getUnitClasses") {
         val controller = UnitClassesController(call)

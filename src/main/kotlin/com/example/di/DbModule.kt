@@ -3,6 +3,7 @@ package com.example.di
 import com.example.dao.*
 import com.example.dao.interfaces.*
 import com.example.dao.interfaces.blackcards.CardsDataSource
+import com.example.dao.interfaces.blackcards.DeckDataSource
 import com.example.dao.interfaces.blackcards.FractionsDataSource
 import org.koin.dsl.module
 
@@ -14,5 +15,6 @@ val dbModule = module {
     single<ChatsDataSource> { ChatsDataSourceImpl() }
     single<CardsDataSource> { CardsDataSourceImpl() }
     single<FractionsDataSource> { FractionsDataSourceImpl() }
+    single<DeckDataSource> { DeckDataSourceImpl() }
     single<FilesDataSource> { FilesDataSourceImpl() }
 }
