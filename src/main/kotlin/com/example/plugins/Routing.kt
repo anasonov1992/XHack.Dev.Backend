@@ -81,6 +81,7 @@ fun Application.configureRouting() {
             getFractionCards()
             getDeckCards()
             createDeck()
+            getDecks()
         }
 
         static {

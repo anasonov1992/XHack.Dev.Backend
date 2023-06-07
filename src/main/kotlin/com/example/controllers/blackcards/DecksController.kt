@@ -45,7 +45,7 @@ class DecksController(private val call: ApplicationCall) {
             return
         }
 
-        call.respond(HttpStatusCode.OK, decksDataSource.getDeckCards(request.deckId))
+        call.respond(HttpStatusCode.OK, decksDataSource.getDeckCards(request.deckId, request.fractionId))
     }
 
     suspend fun createDeck() {
@@ -65,5 +65,15 @@ class DecksController(private val call: ApplicationCall) {
             is DbResult.Conflict -> call.respond(HttpStatusCode.Conflict, "Conflict error")
             is DbResult.Success -> call.respond(HttpStatusCode.OK, dbResult.data)
         }
+    }
+
+    suspend fun getDecks() {
+        val userId = call.principal<JWTPrincipal>()?.getClaim(Constants.USER_CLAIM_NAME, String::class)
+        if (userId == null) {
+            call.respond(HttpStatusCode.Unauthorized, Constants.UNAUTHORIZED)
+            return
+        }
+
+        call.respond(HttpStatusCode.OK, decksDataSource.getDecks())
     }
 }

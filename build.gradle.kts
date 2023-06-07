@@ -56,6 +56,9 @@ dependencies {
     testImplementation("org.jetbrains.kotlin:kotlin-test:$kotlin_version")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version")
     testImplementation("io.ktor:ktor-server-test-host-jvm:2.2.1")
+
+    // UUID
+    implementation("com.benasher44:uuid:0.7.0")
 }
 
 tasks.create("stage") {

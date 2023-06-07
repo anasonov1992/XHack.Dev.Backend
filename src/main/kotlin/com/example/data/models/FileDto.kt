@@ -1,13 +1,13 @@
 package com.example.data.models
 
-import com.example.utils.UUIDSerializer
+import com.benasher44.uuid.Uuid
+import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
-import java.util.*
 
 @Serializable
 data class FileDto(
-    @Serializable(with = UUIDSerializer::class)
-    val guid: UUID,
+    @Contextual
+    val guid: Uuid,
     val name: String,
     val extension: String,
     val imageUrl: String?

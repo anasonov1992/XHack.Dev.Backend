@@ -24,3 +24,10 @@ fun Route.createDeck() {
         controller.createDeck()
     }
 }
+
+fun Route.getDecks() {
+    post("/api/getDecks") {
+        val controller = DecksController(call)
+        controller.getDecks()
+    }
+}

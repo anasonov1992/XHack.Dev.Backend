@@ -6,17 +6,17 @@ import com.example.dao.entities.blackcards.CardUnit
 import com.example.dao.entities.blackcards.Deck
 import com.example.dao.entities.blackcards.Fraction
 import com.example.dao.interfaces.blackcards.DeckDataSource
-import com.example.dao.mappers.blackcards.toCardInDeckDto
-import com.example.dao.mappers.blackcards.toDeckDto
-import com.example.dao.mappers.blackcards.toRankDto
+import com.example.dao.mappers.blackcards.*
 import com.example.dao.tables.blackcards.CardUnits
 import com.example.dao.tables.blackcards.CardsInDeck
 import com.example.dao.tables.blackcards.Decks
 import com.example.dao.tables.blackcards.Fractions
 import com.example.data.models.blackcards.CreateDeckDto
 import com.example.data.models.blackcards.DeckDto
+import com.example.data.models.blackcards.DeckGroupDto
 import com.example.data.models.blackcards.DeckRankGroupDto
 import com.example.utils.DbResult
+import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.batchInsert
 import org.jetbrains.exposed.sql.select
 import java.time.LocalDateTime
@@ -32,9 +32,12 @@ class DeckDataSourceImpl: DeckDataSource {
             .map { rankGroup -> DeckRankGroupDto(rankGroup.key.toRankDto(), rankGroup.value.map { it.toCardInDeckDto() }) }
     }
 
-    override suspend fun getDeckCards(deckId: Int): List<DeckRankGroupDto> = dbQuery {
-        CardInDeck.wrapRows(Decks.innerJoin(CardsInDeck)
-            .select { Decks.id eq deckId })
+    override suspend fun getDeckCards(deckId: Int, fractionId: Int): List<DeckRankGroupDto> = dbQuery {
+        CardInDeck.wrapRows(Fractions
+            .innerJoin(CardUnits)
+            .innerJoin(CardsInDeck)
+            .innerJoin(Decks)
+            .select{ (Fractions.id eq fractionId) and (Decks.id eq deckId) })
             .groupBy({ it.card.rank }, { Pair(it.card, it.amountInDeck) })
             .map { rankGroup -> DeckRankGroupDto(rankGroup.key.toRankDto(), rankGroup.value.map { it.first.toCardInDeckDto(it.second) }) }
     }
@@ -57,5 +60,12 @@ class DeckDataSourceImpl: DeckDataSource {
         DbResult.Success(
             dbDeck.toDeckDto()
         )
+    }
+
+    override suspend fun getDecks(): List<DeckGroupDto> = dbQuery {
+        Deck
+            .all()
+            .groupBy { it.fraction }
+            .map { deckGroup -> DeckGroupDto(deckGroup.key.toFractionShortDto(), deckGroup.value.map { it.toDeckShortDto() }) }
     }
 }
